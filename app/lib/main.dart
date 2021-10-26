@@ -1,4 +1,4 @@
-import 'package:aadhaar_address_update/presentation/screens/home.dart';
+import 'package:aadhaar_address_update/presentation/screens/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }

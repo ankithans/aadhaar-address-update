@@ -1,7 +1,5 @@
-import 'package:aadhaar_address_update/presentation/widgets/elevated_button.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
 import 'package:aadhaar_address_update/presentation/widgets/login/login.dart';
-import 'package:aadhaar_address_update/presentation/widgets/text_form_field.dart';
-import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(
                     builder: (context) => const LoginPage(
                       title: 'Login as Tenant',
+                      identify: 't',
                     ),
                   ),
                 );
@@ -44,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(
                     builder: (context) => const LoginPage(
                       title: 'Login as Landlord',
+                      identify: 'l',
                     ),
                   ),
                 );

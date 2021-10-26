@@ -1,13 +1,18 @@
-import 'package:aadhaar_address_update/presentation/widgets/text_form_field.dart';
+import 'package:aadhaar_address_update/presentation/screens/home.dart';
+import 'package:aadhaar_address_update/presentation/screens/landlord_home.dart';
+import 'package:aadhaar_address_update/presentation/screens/tenant_home.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/text_form_field.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
+  final String identify;
 
   const LoginPage({
     Key? key,
     required this.title,
+    required this.identify,
   }) : super(key: key);
 
   @override
@@ -21,11 +26,23 @@ class _LoginPageState extends State<LoginPage> {
 
   bool verify = false;
 
-  onPressed() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        verify = !verify;
-      });
+  onPressed() async {
+    if (verify && _formKey.currentState!.validate()) {
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget.identify == 't'
+              ? const TenantHomeScreen()
+              : const LandLordHomeScreen(),
+        ),
+      );
+    } else {
+      if (_formKey.currentState!.validate()) {
+        setState(() {
+          verify = true;
+        });
+      }
     }
   }
 

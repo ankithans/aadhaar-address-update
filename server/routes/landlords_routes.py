@@ -16,6 +16,9 @@ async def get_landlords():
     landlords = landlords_serializer(collection_name.find())
     return {"status":"ok","data": landlords}
 
+
+"""
+
 @landlord_api_router.get("/{id}")
 async def get_landlord(id:str):
     landlord=landlords_serializer(collection_name.find_one({"_id": ObjectId(id)}))
@@ -27,7 +30,7 @@ async def create_landlord(landlord: Landlord):
     landlord=landlords_serializer(collection_name.find_one({"_id":_id.inserted_id}))
     return {"status":"ok","data":landlord}
 
-
+"""
 
 
 

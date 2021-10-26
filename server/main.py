@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes.landlords_routes import landlord_api_router
+from .routes.landlords_routes import landlord_api_router
 
 app = FastAPI()
 

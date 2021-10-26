@@ -1,7 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import Optional
 
 class Landlord(BaseModel):
-    name: str
-    description: str
-    completed: bool
-    date: str
+    # id: Optional[str] = Field(alias="_id")
+    address: Optional[str]
+    phone: int
+    fcm: Optional[str]
+    class Config:
+        allow_population_by_field_name = True

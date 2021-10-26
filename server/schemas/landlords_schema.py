@@ -1,10 +1,9 @@
 def landlord_serializer(Landlord) -> dict:
     return {
         "id": str(Landlord["_id"]),
-        "name": Landlord["name"],
-        "description": Landlord["description"],
-        "completed": Landlord["completed"],
-        "date": Landlord["date"],
+        "phone": Landlord["phone"],
+        "fcm": Landlord["fcm"],
+        "address": Landlord["address"]
     }
 
 def landlords_serializer(Landlords) -> list:

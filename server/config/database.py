@@ -1,8 +1,11 @@
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+MONGO_CLIENT_URL=os.getenv("MONGO_CLIENT_URL")
 
-
-client = MongoClient("mongodb+srv://Aryamaan:uidaii@cluster0.pgnqe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+client = MongoClient(MONGO_CLIENT_URL, tls=True, tlsAllowInvalidCertificates=True)
 
 
 db = client.aadhar_address_update_new

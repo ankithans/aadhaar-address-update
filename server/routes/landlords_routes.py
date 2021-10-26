@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
 
-from models.landlords_model import Landlord
-from config.database import collection_name
+from ..models.landlords_model import Landlord
+from ..config.database import collection_name
 
-from schemas.landlords_schema import landlords_serializer, landlord_serializer
+from ..schemas.landlords_schema import landlords_serializer, landlord_serializer
 from bson import ObjectId
 import json
 

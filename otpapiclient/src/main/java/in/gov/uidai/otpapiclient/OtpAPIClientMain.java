@@ -4,6 +4,7 @@ import in.gov.uidai.otpapiclient.model.OtpRes;
 
 import java.util.Scanner;
 
+
 public class OtpAPIClientMain {
 
     public static void main(String[] args) throws Exception {

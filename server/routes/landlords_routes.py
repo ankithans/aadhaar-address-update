@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from ..models.landlords_model import Landlord
 from ..config.database import collection_name
 
-from ..schemas.landlords_schema import landlords_serializer, landlord_serializer
+from ..schemas.landlords_schema import landlords_serializer
 from bson import ObjectId
 import json
 
@@ -31,6 +31,7 @@ async def get_landlord(phone:str):
 async def create_landlord(landlord:Landlord):
     landlordDetails={}
     if(collection_name.find_one({"phone": landlord.phone})):
+        collection_name.update_one({"phone": int(landlord.phone)},{"$set":{"address":landlord.address}})
         landlords = collection_name.find_one({"phone": int(landlord.phone)})
         landlordDetails["id"] = str(ObjectId(landlords["_id"]))
         landlordDetails["address"] = landlords["address"]

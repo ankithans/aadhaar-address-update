@@ -19,11 +19,10 @@ class CustomElevatedButton extends StatefulWidget {
 class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Center(
       child: SizedBox(
-        width: displayWidth(context) * 0.8,
-        height: displayHeight(context) * 0.06,
+        width: displayWidth(context),
+        height: displayHeight(context) * 0.055,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: const Color(0xffF2A413),

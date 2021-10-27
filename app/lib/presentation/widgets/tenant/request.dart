@@ -27,7 +27,8 @@ class _TenantRequestState extends State<TenantRequest> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextFormField(
-                    hintText: 'UID/Phone Number of Landlord',
+                    title: 'UID/Phone Number of Landlord',
+                    hintText: 'xxxx-xxxx-xxxx',
                     textEditingController: uidTextController,
                   ),
                   Padding(

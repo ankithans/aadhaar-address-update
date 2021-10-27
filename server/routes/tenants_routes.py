@@ -4,7 +4,7 @@ from ..models.tenants_model import Tenant
 from ..config.database import db
 
 from ..schemas.tenants_schema import tenants_serializer
-from bson.objectid import ObjectId
+from bson import ObjectId
 
 # from pymongo import ObjectId
 

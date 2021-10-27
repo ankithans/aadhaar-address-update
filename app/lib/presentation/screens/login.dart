@@ -1,6 +1,8 @@
 import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
 import 'package:aadhaar_address_update/presentation/widgets/login/login.dart';
+import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,41 +15,73 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login to your Aadhaar'),
-      ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CustomElevatedButton(
-              title: 'Login as Tenant',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(
-                      title: 'Login as Tenant',
-                      identify: 't',
-                    ),
-                  ),
-                );
-              },
+            SizedBox(
+              height: displayHeight(context) * 0.01,
             ),
-            CustomElevatedButton(
-              title: 'Login as Landlord',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(
-                      title: 'Login as Landlord',
-                      identify: 'l',
-                    ),
+            Image.network(
+              "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png",
+              height: displayHeight(context) * 0.22,
+            ),
+            SizedBox(
+              height: displayHeight(context) * 0.03,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                CustomElevatedButton(
+                  title: 'Login as Tenant',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(
+                          title: 'Login as Tenant',
+                          identify: 't',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                CustomElevatedButton(
+                  title: 'Login as Landlord',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(
+                          title: 'Login as Landlord',
+                          identify: 'l',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "By logging in you agree to the",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w300,
                   ),
-                );
-              },
+                ),
+                Text(
+                  " terms and conditions",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

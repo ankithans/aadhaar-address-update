@@ -5,7 +5,7 @@ import os
 load_dotenv()
 MONGO_CLIENT_URL=os.getenv("MONGO_CLIENT_URL")
 
-client = MongoClient(MONGO_CLIENT_URL, tls=True, tlsAllowInvalidCertificates=True)
+client = MongoClient(MONGO_CLIENT_URL)
 
 
 db = client.aadhar_address_update_new

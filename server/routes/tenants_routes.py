@@ -19,32 +19,40 @@ async def get_tenants():
 #get tenant details
 @tenant_api_router.get("/{phone}")
 async def get_tenant(phone:str):
-    tenantDetails={}
-    tenant = db["tenant"].find_one({"phone": int(phone)})
-    tenantDetails["id"] = str(ObjectId(tenant["_id"]))
-    tenantDetails["address"] = tenant["address"]
-    tenantDetails["fcm"] = tenant["fcm"]
-    tenantDetails["phone"] = tenant["phone"]
-    return {"status":"ok","data": tenantDetails}
-
-@tenant_api_router.post("/login")
-async def create_tenant(tenant:Tenant):
-    tenantDetails={}
-    if(db["tenant"].find_one({"phone": tenant.phone})):
-        tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
-        db["tenant"].update_one({"phone": int(tenant.phone)}, {
-                                   "$set": {"address": tenant.address, "fcm": tenant.fcm}})
+    try:
+        tenantDetails={}
+        tenant = db["tenant"].find_one({"phone": int(phone)})
         tenantDetails["id"] = str(ObjectId(tenant["_id"]))
         tenantDetails["address"] = tenant["address"]
         tenantDetails["fcm"] = tenant["fcm"]
         tenantDetails["phone"] = tenant["phone"]
         return {"status":"ok","data": tenantDetails}
-    else:
-        db["tenant"].insert_one(dict(tenant))
-        print(tenant)
-        tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
-        tenantDetails["id"] = str(ObjectId(tenants["_id"]))
-        tenantDetails["address"] = tenants["address"]
-        tenantDetails["fcm"] = tenants["fcm"]
-        tenantDetails["phone"] = tenants["phone"]
-        return {"status":"ok","data": tenantDetails}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+@tenant_api_router.post("/login")
+async def create_tenant(tenant:Tenant):
+    try:
+        tenantDetails={}
+        if(db["tenant"].find_one({"phone": tenant.phone})):
+            tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
+            db["tenant"].update_one({"phone": int(tenant.phone)}, {
+                                    "$set": {"address": tenant.address, "fcm": tenant.fcm}})
+            tenantDetails["id"] = str(ObjectId(tenant["_id"]))
+            tenantDetails["address"] = tenant["address"]
+            tenantDetails["fcm"] = tenant["fcm"]
+            tenantDetails["phone"] = tenant["phone"]
+            return {"status":"ok","data": tenantDetails}
+        else:
+            db["tenant"].insert_one(dict(tenant))
+            print(tenant)
+            tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
+            tenantDetails["id"] = str(ObjectId(tenants["_id"]))
+            tenantDetails["address"] = tenants["address"]
+            tenantDetails["fcm"] = tenants["fcm"]
+            tenantDetails["phone"] = tenants["phone"]
+            return {"status":"ok","data": tenantDetails}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))

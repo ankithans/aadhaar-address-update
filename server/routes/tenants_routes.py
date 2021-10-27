@@ -6,7 +6,7 @@ from ..config.database import db
 from ..schemas.tenants_schema import tenants_serializer
 from bson.objectid import ObjectId
 
-from pymongo import ObjectId
+
 
 import json
 

@@ -6,5 +6,5 @@ class Request(BaseModel):
     tenant_id: str
     landlord_id: str
     status: int
-    landord_address: str
+    landlord_address: str
     created: datetime

@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         MaterialPageRoute(
           builder: (context) => widget.identify == 't'
               ? const TenantHomeScreen()
-              : const LandLordHomeScreen(),
+              : const LandlordHomeScreen(),
         ),
       );
     } else {

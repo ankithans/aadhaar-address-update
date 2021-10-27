@@ -1,4 +1,5 @@
 import 'package:aadhaar_address_update/presentation/screens/login.dart';
+import 'package:aadhaar_address_update/presentation/widgets/login/profile.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/notifications.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/request.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +19,13 @@ class _TenantHomeScreenState extends State<TenantHomeScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     TenantRequest(),
     TenantNotifications(),
+    ProfilePage(),
   ];
 
   static const List<String> _appBarTitleOptions = <String>[
     'Request Landlord for Address',
     'Notifications',
+    'Profile'
   ];
 
   void _onItemTapped(int index) {
@@ -70,6 +73,10 @@ class _TenantHomeScreenState extends State<TenantHomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,

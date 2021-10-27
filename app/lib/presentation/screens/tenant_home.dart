@@ -2,6 +2,7 @@ import 'package:aadhaar_address_update/presentation/screens/login.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/notifications.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/request.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TenantHomeScreen extends StatefulWidget {
   const TenantHomeScreen({Key? key}) : super(key: key);
@@ -54,6 +55,13 @@ class _TenantHomeScreenState extends State<TenantHomeScreen> {
       //     ],
       //   ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: GoogleFonts.montserrat(
+          fontSize: 13,
+        ),
+        unselectedLabelStyle: GoogleFonts.montserrat(
+          fontSize: 13,
+        ),
+        fixedColor: const Color(0xffF2A413),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.request_page),

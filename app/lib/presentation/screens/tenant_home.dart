@@ -33,26 +33,26 @@ class _TenantHomeScreenState extends State<TenantHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _appBarTitleOptions.elementAt(_selectedIndex),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
-            },
-            icon: const Icon(
-              Icons.logout,
-            ),
-          )
-        ],
-      ),
+      //   appBar: AppBar(
+      //     title: Text(
+      //       _appBarTitleOptions.elementAt(_selectedIndex),
+      //     ),
+      //     actions: [
+      //       IconButton(
+      //         onPressed: () {
+      //           Navigator.pushReplacement(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) => LoginScreen(),
+      //             ),
+      //           );
+      //         },
+      //         icon: const Icon(
+      //           Icons.logout,
+      //         ),
+      //       )
+      //     ],
+      //   ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

@@ -1,4 +1,3 @@
-import 'package:aadhaar_address_update/presentation/screens/home.dart';
 import 'package:aadhaar_address_update/presentation/screens/landlord_home.dart';
 import 'package:aadhaar_address_update/presentation/screens/tenant_home.dart';
 import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';

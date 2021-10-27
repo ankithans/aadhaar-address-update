@@ -1,11 +1,14 @@
 package main;
 
 import auth_2_0.Auth;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ekyc.response.Resp;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +26,7 @@ import java.util.Date;
 public class Main {
 
     @PostMapping(value="/ekyc/{uid}/{txn1}/{optRequest}")
-    public static Object ekycReq(@PathVariable String uid, @PathVariable String txn1, @PathVariable String optRequest) throws Exception {
+    public static ResponseEntity<JsonNode> ekycReq(@PathVariable String uid, @PathVariable String txn1, @PathVariable String optRequest) throws Exception {
         OTPAuth OTPAuth = new OTPAuth();
         EKYCService ekycService = new EKYCService();
         try {
@@ -48,8 +51,13 @@ public class Main {
                 System.out.println("***************************************");
 
                 System.out.println(ekycResponse);
+                String json = String.format("{\"ret\": \"%s\", \"err\": \"%s\"}",resp.getRet(), resp.getErr());
+                JSONObject res = new JSONObject(json);
+                System.out.println(res);
 
-                return ekycResponse;
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode json1 = mapper.readTree(json);
+                return ResponseEntity.ok(json1);
 
             }else {
                 byte[] encryptedString = Base64.getDecoder().decode(resp.getKycRes());
@@ -59,17 +67,21 @@ public class Main {
                 System.out.println("************* Decrypted ekyc response ***********");
 
                 System.out.println(new String(decryptedKycResp));
-//                JSONObject json = XML.toJSONObject(String.valueOf(dataDecryptor));
-                return new String(decryptedKycResp);
+                JSONObject json = XML.toJSONObject(new String(decryptedKycResp));
+                String jsonString = json.toString(4);
+                System.out.println(jsonString);
+
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode json1 = mapper.readTree(jsonString);
+                return ResponseEntity.ok(json1);
             }
 //        return "";
 
         } catch (Exception e) {
             e.printStackTrace();
-            return e;
         }
 
-//        return null;
+        return null;
     }
 
 

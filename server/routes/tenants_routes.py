@@ -4,7 +4,10 @@ from ..models.tenants_model import Tenant
 from ..config.database import db
 
 from ..schemas.tenants_schema import tenants_serializer
-from bson import ObjectId
+from bson.objectid import ObjectId
+
+# from pymongo import ObjectId
+
 import json
 
 tenant_api_router = APIRouter()

@@ -1,30 +1,23 @@
 package ekyc.response;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "Resp")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Resp {
 
-    @XmlAttribute
     private String status;
-    @XmlAttribute
     private String ko;
-    @XmlAttribute
     private String ret;
-    @XmlAttribute
     private String code;
-    @XmlAttribute
     private String txn;
-    @XmlAttribute
     private String ts;
+    private String err;
 
-//    @XmlElement
     private String kycRes;
 
+    @XmlAttribute
     public String getStatus() {
         return status;
     }
@@ -33,6 +26,7 @@ public class Resp {
         this.status = status;
     }
 
+    @XmlAttribute
     public String getKo() {
         return ko;
     }
@@ -41,6 +35,7 @@ public class Resp {
         this.ko = ko;
     }
 
+    @XmlAttribute
     public String getRet() {
         return ret;
     }
@@ -49,6 +44,7 @@ public class Resp {
         this.ret = ret;
     }
 
+    @XmlAttribute
     public String getCode() {
         return code;
     }
@@ -57,6 +53,7 @@ public class Resp {
         this.code = code;
     }
 
+    @XmlAttribute
     public String getTxn() {
         return txn;
     }
@@ -65,6 +62,7 @@ public class Resp {
         this.txn = txn;
     }
 
+    @XmlAttribute
     public String getTs() {
         return ts;
     }
@@ -73,6 +71,16 @@ public class Resp {
         this.ts = ts;
     }
 
+    @XmlAttribute
+    public String getErr() {
+        return err;
+    }
+
+    public void setErr(String err) {
+        this.err = err;
+    }
+
+    @XmlElement
     public String getKycRes() {
         return kycRes;
     }

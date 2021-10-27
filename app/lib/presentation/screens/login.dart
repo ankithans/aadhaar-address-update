@@ -29,39 +29,47 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: displayHeight(context) * 0.03,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                CustomElevatedButton(
-                  title: 'Login as Tenant',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(
-                          title: 'Login as Tenant',
-                          identify: 't',
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: displayWidth(context) * 0.08,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: CustomElevatedButton(
+                      title: 'Login as Tenant',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(
+                              title: 'Tenant',
+                              identify: 't',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  CustomElevatedButton(
+                    title: 'Login as Landlord',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(
+                            title: 'Landlord',
+                            identify: 'l',
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                CustomElevatedButton(
-                  title: 'Login as Landlord',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(
-                          title: 'Login as Landlord',
-                          identify: 'l',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

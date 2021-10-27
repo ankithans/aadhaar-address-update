@@ -1,9 +1,10 @@
-import 'package:aadhaar_address_update/presentation/screens/home.dart';
 import 'package:aadhaar_address_update/presentation/screens/landlord_home.dart';
 import 'package:aadhaar_address_update/presentation/screens/tenant_home.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
 import 'package:aadhaar_address_update/presentation/widgets/common/text_form_field.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -49,30 +50,66 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: displayWidth(context) * 0.05,
-              vertical: displayHeight(context) * 0.1,
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: displayWidth(context) * 0.08,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: displayHeight(context) * 0.07,
             ),
-            child: Form(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Login " + widget.title,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
+                    ),
+                    Text(
+                      "Hello, welcome back to your account",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+                Image.network(
+                  "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png",
+                  height: displayHeight(context) * 0.05,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: displayHeight(context) * 0.06,
+            ),
+            Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextFormField(
-                    hintText: 'UID/Phone Number',
+                    title: 'UID/Phone Number',
+                    hintText: 'xxxx-xxxx-xxxx',
                     textEditingController: uidTextController,
                   ),
                   verify
                       ? Column(
                           children: [
                             CustomTextFormField(
-                              hintText: 'Enter OTP',
+                              title: 'OTP',
+                              hintText: 'xxxxxx',
                               textEditingController: otpTextController,
                             ),
                           ],
@@ -81,18 +118,40 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: displayHeight(context) * 0.01,
-                      horizontal: displayWidth(context) * 0.03,
                     ),
-                    child: ElevatedButton(
+                    child: CustomElevatedButton(
+                      title: verify ? 'submit' : 'verify',
                       onPressed: onPressed,
-                      child: Text(verify ? 'Submit' : 'Verify'),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: displayHeight(context) * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "By logging in you agree to the",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                Text(
+                  " terms and conditions",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

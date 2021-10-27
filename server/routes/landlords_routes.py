@@ -53,7 +53,6 @@ async def create_landlord(landlord: Landlord):
             return {"status": "ok", "data": landlordDetails}
         else:
             collection_name.insert_one(dict(landlord))
-            print(landlord)
             landlords = collection_name.find_one({"phone": int(landlord.phone)})
             landlordDetails["id"] = str(ObjectId(landlords["_id"]))
             landlordDetails["address"] = landlords["address"]

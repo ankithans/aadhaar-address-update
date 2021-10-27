@@ -4,7 +4,7 @@ from ..models.landlords_model import Landlord
 from ..config.database import collection_name
 
 from ..schemas.landlords_schema import landlords_serializer
-from bson import ObjectId
+from bson.objectid import ObjectId
 
 
 

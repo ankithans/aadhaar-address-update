@@ -92,7 +92,13 @@ class _TenantRequestState extends State<TenantRequest> {
                       height: displayHeight(context) * 0.01,
                     ),
                     CustomElevatedButton(
-                      title: 'submit',
+                      disable: false,
+                      title: Text(
+                        'submit',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           setState(() {});

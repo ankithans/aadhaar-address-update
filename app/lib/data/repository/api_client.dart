@@ -9,10 +9,14 @@ class APIClient {
   Future<OtpAPI> getOtp(String uid) async {
     try {
       var response = await Dio().post(otpURI + '/' + uid);
-      developer.log(response.data);
-      return OtpAPI.fromJson(response.data);
+      print(response.data['err']);
+      if (response.data['err'] == null) {
+        print(response.data);
+        return OtpAPI.fromJson(response.data);
+      }
+      throw "wrong UID";
     } on DioError catch (e) {
-      developer.log(e.toString());
+      print(e.toString());
       var error = json.decode(e.response.toString());
       throw error;
     }

@@ -12,12 +12,13 @@ class OtpCubit extends Cubit<OtpState> {
 
   final APIClient apiClient;
 
-  void sendOtp(String uid) async {
+  sendOtp(String uid) async {
     emit(OtpLoadingState());
     try {
       OtpAPI otpAPI = await apiClient.getOtp(uid);
       emit(OtpRecievedState(txn: otpAPI.txn, err: otpAPI.err, ret: otpAPI.ret));
     } catch (e) {
+      print(e);
       emit(OtpFailureState(err: e.toString()));
     }
   }

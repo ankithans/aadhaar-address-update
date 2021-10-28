@@ -30,11 +30,15 @@ dependencies:
   bloc: ^7.2.1
   cupertino_icons: ^1.0.2
   dio: ^4.0.1
+  firebase_core: ^1.8.0
+  firebase_messaging: ^10.0.9
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.1
+  flutter_local_notifications: ^9.0.1
   flutter_spinkit: ^5.1.0
   google_fonts: ^2.1.0
+  shared_preferences: ^2.0.8
 
 dev_dependencies:
   flutter_lints: ^1.0.0

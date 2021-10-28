@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from .routes.landlords_routes import landlord_api_router
 from .routes.tenants_routes import tenant_api_router
 from .routes.requests_routes import request_api_router
+from fastapi.middleware.cors import CORSMiddleware
 
 tags_metadata = [
     {
@@ -26,6 +27,14 @@ app = FastAPI(
     description="Backend for the Aadhar Address Update",
     version="1.0",
     openapi_tags=tags_metadata
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app = FastAPI()

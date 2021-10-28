@@ -6,5 +6,8 @@ class Request(BaseModel):
     tenant_id: str
     landlord_id: str
     status: int
-    landord_address: str
-    created: datetime
+    landlord_address: Optional[str]
+    created: Optional[datetime]
+    relation:str
+    reason:str
+    updated: datetime

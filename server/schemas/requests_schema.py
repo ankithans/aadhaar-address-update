@@ -5,7 +5,10 @@ def request_serializer(Request) -> dict:
         "landlord_id": Request["landlord_id"],
         "status": Request["status"],
         "landlord_address": Request["landlord_address"],
-        "created": Request["created"]
+        "created": Request["created"],
+        "relation": Request["relation"],
+        "reason": Request["reason"],
+        "updated": Request["updated"]
     }
 
 def requests_serializer(Requests) -> list:

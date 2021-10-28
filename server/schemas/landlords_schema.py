@@ -3,7 +3,8 @@ def landlord_serializer(Landlord) -> dict:
         "id": str(Landlord["_id"]),
         "phone": Landlord["phone"],
         "fcm": Landlord["fcm"],
-        "address": Landlord["address"]
+        "address": Landlord["address"],
+        "uid": Landlord["uid"]
     }
 
 def landlords_serializer(Landlords) -> list:

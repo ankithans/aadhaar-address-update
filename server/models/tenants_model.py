@@ -6,3 +6,4 @@ class Tenant(BaseModel):
     address: Optional[str]
     phone: int
     fcm: Optional[str]
+    uid: Optional[str]

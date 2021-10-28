@@ -44,7 +44,7 @@ async def create_landlord(landlord: Landlord):
         landlordDetails = {}
         if(collection_name.find_one({"phone": landlord.phone})):
             collection_name.update_one({"phone": int(landlord.phone)}, {
-                                    "$set": {"address": landlord.address, "fcm": landlord.fcm}})
+                                    "$set": {"address": landlord.address, "fcm": landlord.fcm, "uid": landlord.uid}})
             landlords = collection_name.find_one({"phone": int(landlord.phone)})
             landlordDetails["id"] = str(ObjectId(landlords["_id"]))
             landlordDetails["address"] = landlords["address"]

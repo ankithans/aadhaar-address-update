@@ -28,7 +28,8 @@ async def create_tenant(request:Request):
             landlord={
                 "address":"",
                 "phone": request.landlord_id,
-                "fcm": ""
+                "fcm": "",
+                "uid": ""
             }
             db["landlord"].insert_one(landlord)
         db["requests"].insert_one(dict(request))

@@ -6,12 +6,14 @@ class CustomTextFormField extends StatefulWidget {
   final String title;
   final String hintText;
   final TextEditingController textEditingController;
+  final bool disable;
 
   const CustomTextFormField({
     Key? key,
     required this.title,
     required this.hintText,
     required this.textEditingController,
+    required this.disable,
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             height: displayHeight(context) * 0.011,
           ),
           TextFormField(
+            enabled: !widget.disable,
             style: GoogleFonts.montserrat(
               fontSize: 14,
             ),

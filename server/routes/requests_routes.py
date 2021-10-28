@@ -4,7 +4,9 @@ from ..models.requests_model import Request
 from ..config.database import db
 
 from ..schemas.requests_schema import requests_serializer
-from bson import ObjectId
+from bson.objectid import ObjectId
+
+
 import json
 
 request_api_router = APIRouter()

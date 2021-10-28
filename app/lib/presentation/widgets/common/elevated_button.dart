@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomElevatedButton extends StatefulWidget {
-  final String title;
+  final Widget title;
   final Function onPressed;
+  final bool disable;
 
   const CustomElevatedButton({
     Key? key,
     required this.title,
     required this.onPressed,
+    required this.disable,
   }) : super(key: key);
 
   @override
@@ -28,13 +30,8 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
             primary: const Color(0xffF2A413),
             elevation: 0,
           ),
-          onPressed: () => widget.onPressed(),
-          child: Text(
-            widget.title,
-            style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          onPressed: widget.disable ? null : () => widget.onPressed(),
+          child: widget.title,
         ),
       ),
     );

@@ -40,7 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: CustomElevatedButton(
-                      title: 'Login as Tenant',
+                      disable: false,
+                      title: Text(
+                        'Login as Tenant',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -55,7 +61,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   CustomElevatedButton(
-                    title: 'Login as Landlord',
+                    disable: false,
+                    title: Text(
+                      'Login as Landlord',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,

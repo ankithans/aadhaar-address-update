@@ -74,11 +74,13 @@ class _TenantRequestState extends State<TenantRequest> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextFormField(
+                      disable: false,
                       title: 'UID/Phone Number of Landlord',
                       hintText: 'xxxx-xxxx-xxxx',
                       textEditingController: uidTextController,
                     ),
                     CustomTextFormField(
+                      disable: false,
                       title: 'Relation with above person?',
                       hintText: 'friend',
                       textEditingController: relationTextController,
@@ -92,7 +94,13 @@ class _TenantRequestState extends State<TenantRequest> {
                       height: displayHeight(context) * 0.01,
                     ),
                     CustomElevatedButton(
-                      title: 'submit',
+                      disable: false,
+                      title: Text(
+                        'submit',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           setState(() {});

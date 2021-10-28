@@ -3,7 +3,8 @@ def tenant_serializer(Tenant) -> dict:
         "id": str(Tenant["_id"]),
         "phone": Tenant["phone"],
         "fcm": Tenant["fcm"],
-        "address": Tenant["address"]
+        "address": Tenant["address"],
+        "uid": Tenant["uid"]
     }
 
 def tenants_serializer(Tenants) -> list:

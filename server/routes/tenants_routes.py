@@ -41,7 +41,7 @@ async def create_tenant(tenant:Tenant):
         if(db["tenant"].find_one({"phone": tenant.phone})):
             tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
             db["tenant"].update_one({"phone": int(tenant.phone)}, {
-                                    "$set": {"address": tenant.address, "fcm": tenant.fcm}})
+                                    "$set": {"address": tenant.address, "fcm": tenant.fcm, "uid": tenant.uid}})
             tenantDetails["id"] = str(ObjectId(tenant["_id"]))
             tenantDetails["address"] = tenant["address"]
             tenantDetails["fcm"] = tenant["fcm"]

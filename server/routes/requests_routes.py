@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException
+from datetime import datetime
 
 from ..models.requests_model import Request
+from ..models.status_model import Status
 from ..config.database import db
 
 from ..schemas.requests_schema import requests_serializer
@@ -38,6 +40,30 @@ async def create_tenant(request:Request):
         return {"status":"ok","data": request}
         # fcm token here
 
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+@request_api_router.post("/status_update")
+async def status_update(status:Status):
+    try:
+        if status.approval_status: 
+            updateStat = db["requests"].update_one({"landlord_id": status.landlord_id},{
+                "$set":{
+                    "status": 1,
+                    "landlord_address": status.landlord_address,
+                    "updated": status.updated
+                }
+            })
+            print(updateStat)
+        else:
+            db["requests"].update_one({"landlord_id": status.landlord_id},{
+                "$set":{
+                    "status": 2,
+                    "updated": status.updated
+                }
+            })
+        return {"status":"ok","data": status}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))

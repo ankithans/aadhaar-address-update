@@ -45,4 +45,16 @@ class APIClient {
       throw error;
     }
   }
+
+  Future<TenantLogin> landlordLogin(TenantInput tenantInput) async {
+    try {
+      var response =
+          await Dio().post(restURI + 'landlords/login', data: tenantInput);
+
+      return TenantLogin.fromJson(response.data);
+    } on DioError catch (e) {
+      var error = json.decode(e.response.toString());
+      throw error;
+    }
+  }
 }

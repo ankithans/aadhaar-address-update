@@ -176,9 +176,11 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             if (verify && _formKey.currentState!.validate()) {
                               BlocProvider.of<OtpCubit>(context).sentOtpToEkyc(
-                                  uidTextController.text,
-                                  txn,
-                                  otpTextController.text);
+                                uidTextController.text,
+                                txn,
+                                otpTextController.text,
+                                widget.identify == 't',
+                              );
                             } else {
                               if (_formKey.currentState!.validate()) {
                                 BlocProvider.of<OtpCubit>(context)

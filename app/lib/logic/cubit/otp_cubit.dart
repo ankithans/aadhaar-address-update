@@ -25,7 +25,7 @@ class OtpCubit extends Cubit<OtpState> {
     }
   }
 
-  sentOtpToEkyc(String uid, String txn, String otp) async {
+  sentOtpToEkyc(String uid, String txn, String otp, bool tenant) async {
     emit(EkycLoadingState());
     try {
       EkycAPI ekycAPI = await apiClient.ekycVerify(uid, txn, otp);
@@ -46,7 +46,12 @@ class OtpCubit extends Cubit<OtpState> {
         fcm: "fcm",
         uid: uid,
       );
-      TenantLogin tenantLogin = await apiClient.tenantLogin(tenantInput);
+
+      if (tenant) {
+        TenantLogin tenantLogin = await apiClient.tenantLogin(tenantInput);
+      } else {
+        TenantLogin tenantLogin = await apiClient.landlordLogin(tenantInput);
+      }
 
       emit(EkycRecievedState());
     } catch (e) {

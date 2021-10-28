@@ -73,6 +73,10 @@ public class Main {
 
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode json1 = mapper.readTree(jsonString);
+//                JsonNode KycRes = json1.get("KycRes");
+//                JsonNode uidData = KycRes.get("UidData");
+//
+//                System.out.println(uidData);
                 return ResponseEntity.ok(json1);
             }
 //        return "";

@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   bool verify = false;
   bool isLoading = false;
   bool verifyDisable = false;
+  String txn = "";
 
   onPressed() async {}
 
@@ -98,11 +99,37 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 }
                 if (state is OtpRecievedState) {
+                  txn = state.txn;
                   isLoading = false;
                   verifyDisable = false;
-                  setState(() {
-                    verify = true;
-                  });
+
+                  verify = true;
+                }
+
+                if (state is EkycLoadingState) {
+                  isLoading = true;
+                  verifyDisable = true;
+                }
+                if (state is EkycFailureState) {
+                  isLoading = false;
+                  verifyDisable = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.err),
+                    ),
+                  );
+                }
+
+                if (state is EkycRecievedState) {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => widget.identify == 't'
+                          ? const TenantHomeScreen()
+                          : const LandlordHomeScreen(),
+                    ),
+                  );
                 }
               },
               builder: (context, state) {
@@ -146,15 +173,10 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                           onPressed: () async {
                             if (verify && _formKey.currentState!.validate()) {
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => widget.identify == 't'
-                                      ? const TenantHomeScreen()
-                                      : const LandlordHomeScreen(),
-                                ),
-                              );
+                              BlocProvider.of<OtpCubit>(context).sentOtpToEkyc(
+                                  uidTextController.text,
+                                  txn,
+                                  otpTextController.text);
                             } else {
                               if (_formKey.currentState!.validate()) {
                                 BlocProvider.of<OtpCubit>(context)

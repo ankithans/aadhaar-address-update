@@ -1,3 +1,4 @@
+import 'package:aadhaar_address_update/data/ekyc_model.dart';
 import 'package:aadhaar_address_update/data/otp_model.dart';
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:bloc/bloc.dart';
@@ -18,8 +19,17 @@ class OtpCubit extends Cubit<OtpState> {
       OtpAPI otpAPI = await apiClient.getOtp(uid);
       emit(OtpRecievedState(txn: otpAPI.txn, err: otpAPI.err, ret: otpAPI.ret));
     } catch (e) {
-      print(e);
       emit(OtpFailureState(err: e.toString()));
+    }
+  }
+
+  sentOtpToEkyc(String uid, String txn, String otp) async {
+    emit(EkycLoadingState());
+    try {
+      EkycAPI ekycAPI = await apiClient.ekycVerify(uid, txn, otp);
+      emit(EkycRecievedState());
+    } catch (e) {
+      emit(EkycFailureState(err: e.toString()));
     }
   }
 }

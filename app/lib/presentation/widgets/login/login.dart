@@ -139,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextFormField(
+                        disable: verifyDisable,
                         title: 'UID/Phone Number',
                         hintText: 'xxxx-xxxx-xxxx',
                         textEditingController: uidTextController,
@@ -147,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                           ? Column(
                               children: [
                                 CustomTextFormField(
+                                  disable: verifyDisable,
                                   title: 'OTP',
                                   hintText: 'xxxxxx',
                                   textEditingController: otpTextController,

@@ -26,12 +26,12 @@ async def get_requests():
 @request_api_router.post("/")
 async def create_tenant(request:Request):
     try:
-        if db["landlord"].find_one({"phone": int(request.landlord_id)}):
+        if db["landlord"].find_one({"phone": int(request.landlord_uid)}):
             print("landlord exists")
         else:
             landlord={
                 "address":"",
-                "phone": request.landlord_id,
+                "phone": request.landlord_uid,
                 "fcm": "",
                 "uid": ""
             }
@@ -48,16 +48,16 @@ async def create_tenant(request:Request):
 async def status_update(status:Status):
     try:
         if status.approval_status: 
-            updateStat = db["requests"].update_one({"landlord_id": status.landlord_id},{
+            updateStat = db["requests"].update_one({},{
                 "$set":{
                     "status": 1,
                     "landlord_address": status.landlord_address,
                     "updated": status.updated
-                }
+                }, "array_filters": [{"landlord_id": status.landlord_uid},{"status":0}]
             })
             print(updateStat)
         else:
-            db["requests"].update_one({"landlord_id": status.landlord_id},{
+            db["requests"].update_one({"landlord_id": status.landlord_uid},{
                 "$set":{
                     "status": 2,
                     "updated": status.updated

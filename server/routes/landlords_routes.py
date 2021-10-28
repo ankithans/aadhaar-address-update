@@ -6,8 +6,6 @@ from ..config.database import collection_name
 from ..schemas.landlords_schema import landlords_serializer
 from bson.objectid import ObjectId
 
-
-
 import json
 
 landlord_api_router = APIRouter()

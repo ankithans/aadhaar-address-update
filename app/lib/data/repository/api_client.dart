@@ -1,10 +1,10 @@
 import 'dart:convert';
-
-import 'package:aadhaar_address_update/data/ekyc_model.dart';
-import 'package:aadhaar_address_update/data/otp_model.dart';
+import 'package:aadhaar_address_update/data/models/ekyc_model.dart';
+import 'package:aadhaar_address_update/data/models/otp_model.dart';
+import 'package:aadhaar_address_update/data/models/tenant_input.dart';
+import 'package:aadhaar_address_update/data/models/tenant_login.dart';
 import 'package:aadhaar_address_update/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
-import 'dart:developer' as developer;
 
 class APIClient {
   Future<OtpAPI> getOtp(String uid) async {
@@ -29,7 +29,18 @@ class APIClient {
       }
       throw "OTP Entered was Incorreect!";
     } on DioError catch (e) {
-      developer.log(e.toString());
+      var error = json.decode(e.response.toString());
+      throw error;
+    }
+  }
+
+  Future<TenantLogin> tenantLogin(TenantInput tenantInput) async {
+    try {
+      var response =
+          await Dio().post(restURI + 'tenants/login', data: tenantInput);
+
+      return TenantLogin.fromJson(response.data);
+    } on DioError catch (e) {
       var error = json.decode(e.response.toString());
       throw error;
     }

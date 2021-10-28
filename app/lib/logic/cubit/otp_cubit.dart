@@ -1,5 +1,7 @@
-import 'package:aadhaar_address_update/data/ekyc_model.dart';
-import 'package:aadhaar_address_update/data/otp_model.dart';
+import 'package:aadhaar_address_update/data/models/ekyc_model.dart';
+import 'package:aadhaar_address_update/data/models/otp_model.dart';
+import 'package:aadhaar_address_update/data/models/tenant_input.dart';
+import 'package:aadhaar_address_update/data/models/tenant_login.dart';
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -27,6 +29,25 @@ class OtpCubit extends Cubit<OtpState> {
     emit(EkycLoadingState());
     try {
       EkycAPI ekycAPI = await apiClient.ekycVerify(uid, txn, otp);
+
+      // Tenant login in database
+      String address = ekycAPI.kycRes.uidData.poa.house +
+          " " +
+          ekycAPI.kycRes.uidData.poa.loc +
+          " " +
+          ekycAPI.kycRes.uidData.poa.dist +
+          " " +
+          ekycAPI.kycRes.uidData.poa.country +
+          " " +
+          ekycAPI.kycRes.uidData.poa.pc.toString();
+      TenantInput tenantInput = TenantInput(
+        address: address,
+        phone: ekycAPI.kycRes.uidData.poi.phone,
+        fcm: "fcm",
+        uid: uid,
+      );
+      TenantLogin tenantLogin = await apiClient.tenantLogin(tenantInput);
+
       emit(EkycRecievedState());
     } catch (e) {
       emit(EkycFailureState(err: e.toString()));

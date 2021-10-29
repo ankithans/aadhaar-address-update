@@ -41,7 +41,7 @@ dependencies:
   google_fonts: ^2.1.0
   shared_preferences: ^2.0.8
   uuid: ^3.0.5
-  xml_parser: ^1.0.0
+  xml2json: ^5.3.1
 
 dev_dependencies:
   flutter_lints: ^1.0.0

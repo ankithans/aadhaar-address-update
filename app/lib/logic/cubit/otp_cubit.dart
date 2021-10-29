@@ -1,4 +1,5 @@
 import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_model.dart';
+import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_poa.dart';
 import 'package:aadhaar_address_update/data/models/aadhaar/otp_model.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_input.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_login.dart';
@@ -33,23 +34,24 @@ class OtpCubit extends Cubit<OtpState> {
   sentOtpToEkyc(String uid, String txn, String otp, bool tenant) async {
     emit(EkycLoadingState());
     try {
-      EkycAPI ekycAPI = await apiClient.ekycVerify(uid, txn, otp);
+      EkycPoa ekycPoa = await apiClient.ekycVerify(uid, txn, otp);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String fcm = prefs.getString('fcm').toString();
-      // Tenant login in database
-      //   String address = ekycAPI.kycRes.uidData.poa.house +
-      //       " " +
-      //       ekycAPI.kycRes.uidData.poa.loc +
-      //       " " +
-      //       ekycAPI.kycRes.uidData.poa.dist +
-      //       " " +
-      //       ekycAPI.kycRes.uidData.poa.country +
-      //       " " +
-      //       ekycAPI.kycRes.uidData.poa.pc.toString();
+      String phone = prefs.getString('phone').toString();
+      //   Tenant login in database
+      String address = ekycPoa.house +
+          " " +
+          ekycPoa.loc +
+          " " +
+          ekycPoa.dist +
+          " " +
+          ekycPoa.country +
+          " " +
+          ekycPoa.pc.toString();
       TenantInput tenantInput = TenantInput(
         address: "address",
-        phone: 9999999999, //ekycAPI.kycRes.uidData.poi.phone,
+        phone: int.parse(phone),
         fcm: fcm,
         uid: uid,
       );

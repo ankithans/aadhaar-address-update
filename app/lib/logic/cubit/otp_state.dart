@@ -10,12 +10,10 @@ class OtpLoadingState extends OtpState {}
 class OtpRecievedState extends OtpState {
   String txn;
   Null err;
-  String ret;
 
   OtpRecievedState({
     required this.txn,
     required this.err,
-    required this.ret,
   });
 }
 

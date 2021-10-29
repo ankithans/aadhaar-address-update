@@ -6,6 +6,7 @@ import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 part 'otp_state.dart';
 
@@ -19,8 +20,11 @@ class OtpCubit extends Cubit<OtpState> {
   sendOtp(String uid) async {
     emit(OtpLoadingState());
     try {
-      OtpAPI otpAPI = await apiClient.getOtp(uid);
-      emit(OtpRecievedState(txn: otpAPI.txn, err: otpAPI.err, ret: otpAPI.ret));
+      var uuid = const Uuid();
+      String txn = uuid.v4();
+
+      OtpAPI otpAPI = await apiClient.getOtp(uid, txn);
+      emit(OtpRecievedState(txn: txn, err: otpAPI.errCode));
     } catch (e) {
       emit(OtpFailureState(err: e.toString()));
     }
@@ -34,18 +38,18 @@ class OtpCubit extends Cubit<OtpState> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String fcm = prefs.getString('fcm').toString();
       // Tenant login in database
-      String address = ekycAPI.kycRes.uidData.poa.house +
-          " " +
-          ekycAPI.kycRes.uidData.poa.loc +
-          " " +
-          ekycAPI.kycRes.uidData.poa.dist +
-          " " +
-          ekycAPI.kycRes.uidData.poa.country +
-          " " +
-          ekycAPI.kycRes.uidData.poa.pc.toString();
+      //   String address = ekycAPI.kycRes.uidData.poa.house +
+      //       " " +
+      //       ekycAPI.kycRes.uidData.poa.loc +
+      //       " " +
+      //       ekycAPI.kycRes.uidData.poa.dist +
+      //       " " +
+      //       ekycAPI.kycRes.uidData.poa.country +
+      //       " " +
+      //       ekycAPI.kycRes.uidData.poa.pc.toString();
       TenantInput tenantInput = TenantInput(
-        address: address,
-        phone: ekycAPI.kycRes.uidData.poi.phone,
+        address: "address",
+        phone: 9999999999, //ekycAPI.kycRes.uidData.poi.phone,
         fcm: fcm,
         uid: uid,
       );

@@ -1,36 +1,20 @@
 class OtpAPI {
   OtpAPI({
-    required this.txn,
-    this.err,
-    required this.code,
-    required this.ts,
-    required this.ret,
-    this.actn,
+    required this.status,
+    this.errCode,
   });
-  late final String txn;
-  late final Null err;
-  late final String code;
-  late final String ts;
-  late final String ret;
-  late final Null actn;
+  late final String status;
+  late final Null errCode;
 
   OtpAPI.fromJson(Map<String, dynamic> json) {
-    txn = json['txn'];
-    err = null;
-    code = json['code'];
-    ts = json['ts'];
-    ret = json['ret'];
-    actn = null;
+    status = json['status'];
+    errCode = null;
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['txn'] = txn;
-    _data['err'] = err;
-    _data['code'] = code;
-    _data['ts'] = ts;
-    _data['ret'] = ret;
-    _data['actn'] = actn;
+    _data['status'] = status;
+    _data['errCode'] = errCode;
     return _data;
   }
 }

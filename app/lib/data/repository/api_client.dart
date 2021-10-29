@@ -11,10 +11,14 @@ import 'package:aadhaar_address_update/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
 
 class APIClient {
-  Future<OtpAPI> getOtp(String uid) async {
+  Future<OtpAPI> getOtp(String uid, String txn) async {
     try {
-      var response = await Dio().post(otpURI + '/' + uid);
-      if (response.data['err'] == null) {
+      var response = await Dio().post(
+        otpURI,
+        data: {"uid": uid, "txnId": txn},
+      );
+      print(response.data);
+      if (response.data['errCode'] == null) {
         return OtpAPI.fromJson(response.data);
       }
       throw "wrong UID";

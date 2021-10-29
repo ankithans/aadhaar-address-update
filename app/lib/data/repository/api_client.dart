@@ -64,7 +64,7 @@ class APIClient {
       TenantRequestInput tenantRequestInput) async {
     try {
       var response =
-          await Dio().post(restURI + 'requests', data: tenantRequestInput);
+          await Dio().post(restURI + 'requests/', data: tenantRequestInput);
 
       return TenantRequest.fromJson(response.data);
     } on DioError catch (e) {

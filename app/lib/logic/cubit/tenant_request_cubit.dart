@@ -3,6 +3,7 @@ import 'package:aadhaar_address_update/data/models/tenant/tenant_request_input.d
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'tenant_request_state.dart';
 
@@ -17,8 +18,11 @@ class TenantRequestCubit extends Cubit<TenantRequestState> {
     emit(TenantRequestLoading());
     try {
       String datetime = DateTime.now().toString();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String tenantUID = prefs.getString('tenantUID').toString();
+
       TenantRequestInput tenantRequestInput = TenantRequestInput(
-        tenantUid: uid,
+        tenantUid: tenantUID,
         landlordUid: uid,
         landlordNo: 0,
         status: 0,

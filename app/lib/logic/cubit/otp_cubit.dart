@@ -52,8 +52,10 @@ class OtpCubit extends Cubit<OtpState> {
 
       if (tenant) {
         TenantLogin tenantLogin = await apiClient.tenantLogin(tenantInput);
+        prefs.setString("tenantUID", uid);
       } else {
         TenantLogin tenantLogin = await apiClient.landlordLogin(tenantInput);
+        prefs.setString("landlordUID", uid);
       }
 
       emit(EkycRecievedState());

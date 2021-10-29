@@ -58,7 +58,7 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: displayWidth(context) * 0.08,
+          horizontal: displayWidth(context) * 0.07,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +133,7 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                           physics: const BouncingScrollPhysics(),
                           itemCount: requestNotifications.data.isEmpty
                               ? 0
-                              : requestNotifications.data.length - 1,
+                              : requestNotifications.data.length,
                           itemBuilder: (context, index) {
                             return Container(
                               decoration: BoxDecoration(
@@ -148,30 +148,68 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                             ? const Color(0xffF20505)
                                             : const Color(0xffF2A413),
                               ),
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.only(
+                                top: 10,
+                                left: 10,
+                                bottom: 10,
+                                // right: 5,
+                              ),
                               margin: EdgeInsets.only(
                                 bottom: displayHeight(context) * 0.015,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    requestNotifications.data[index].relation,
-                                    style: GoogleFonts.montserrat(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        requestNotifications
+                                            .data[index].relation,
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: displayHeight(context) * 0.01,
+                                      ),
+                                      SizedBox(
+                                        width: displayWidth(context) * 0.52,
+                                        child: Text(
+                                          requestNotifications
+                                              .data[index].reason,
+                                          style: GoogleFonts.montserrat(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: displayHeight(context) * 0.01,
-                                  ),
-                                  Text(
-                                    requestNotifications.data[index].reason,
-                                    style: GoogleFonts.montserrat(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w300,
+                                  Transform(
+                                    transform: Matrix4.identity()..scale(0.78),
+                                    child: Chip(
+                                      label: Text(
+                                        requestNotifications
+                                                    .data[index].status ==
+                                                0
+                                            ? 'In Progress'
+                                            : requestNotifications
+                                                        .data[index].status ==
+                                                    1
+                                                ? 'Approved'
+                                                : 'Rejected',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      backgroundColor: const Color(0xFFa3bdc4),
                                     ),
                                   ),
                                 ],

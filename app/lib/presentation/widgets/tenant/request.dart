@@ -33,7 +33,7 @@ class _TenantRequestState extends State<TenantRequest> {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: displayWidth(context) * 0.08,
+            horizontal: displayWidth(context) * 0.07,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +96,7 @@ class _TenantRequestState extends State<TenantRequest> {
                         child: Column(
                           children: [
                             Text(
-                              'Request Successfull',
+                              'Request Successful',
                               style: GoogleFonts.montserrat(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

@@ -35,7 +35,7 @@ class Data {
   late final String id;
   late final String tenantUid;
   late final String landlordUid;
-  late final String? landlordNo;
+  late final landlordNo;
   late final int status;
   late final String landlordAddress;
   late final String created;

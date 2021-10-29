@@ -18,7 +18,7 @@ class _TenantHomeScreenState extends State<TenantHomeScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     TenantRequest(),
-    TenantNotifications(),
+    TenantNotificationsWidget(),
     ProfilePage(),
   ];
 

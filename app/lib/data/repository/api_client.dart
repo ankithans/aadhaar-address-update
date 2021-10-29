@@ -77,8 +77,7 @@ class APIClient {
 
   Future<TenantNotifications> tenantNotifications(String uid) async {
     try {
-      var response = await Dio().post(restURI + 'requests/tenant/' + uid);
-
+      var response = await Dio().get(restURI + 'requests/tenant/' + uid);
       return TenantNotifications.fromJson(response.data);
     } on DioError catch (e) {
       var error = json.decode(e.response.toString());

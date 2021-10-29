@@ -1,5 +1,6 @@
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:aadhaar_address_update/logic/cubit/otp_cubit.dart';
+import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
 import 'package:aadhaar_address_update/logic/cubit/tenant_request_cubit.dart';
 import 'package:aadhaar_address_update/presentation/screens/landlord_home.dart';
 import 'package:aadhaar_address_update/presentation/screens/login.dart';
@@ -129,6 +130,10 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TenantRequestCubit>(
           create: (tenantCubitContext) => TenantRequestCubit(apiClient),
         ),
+        BlocProvider<TenantNotifcationsCubit>(
+          create: (tenantNotificationsCubitContext) =>
+              TenantNotifcationsCubit(apiClient),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -136,7 +141,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const LoginScreen(),
+        home: const TenantHomeScreen(),
       ),
     );
   }

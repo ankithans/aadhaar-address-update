@@ -126,9 +126,6 @@ class _TenantRequestState extends State<TenantRequest> {
                                 ),
                               ],
                             ),
-                            // SizedBox(
-                            //   height: displayHeight(context) * 0.01,
-                            // ),
                           ],
                         ),
                       ),

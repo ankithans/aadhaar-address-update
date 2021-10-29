@@ -12,3 +12,6 @@ class Request(BaseModel):
     relation:str
     reason:str
     updated: datetime
+
+def requests_serializer(Requests) -> list:
+    return [requests_serializer(request) for request in Requests]

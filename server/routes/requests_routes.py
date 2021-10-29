@@ -69,3 +69,21 @@ async def status_update(status:Status):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))
+
+@request_api_router.get("/landlord/{landlord_uid}")
+async def get_landlord_requests(landlord_uid:str):
+    try:
+        requests = requests_serializer(db["requests"].find({"landlord_uid": str(landlord_uid)}))
+        return {"status": "ok", "data": requests}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+@request_api_router.get("/tenant/{tenant_uid}")
+async def get_tenant_requests(tenant_uid:str):
+    try:
+        requests = requests_serializer(db["requests"].find({"tenant_uid": str(tenant_uid)}))
+        return {"status": "ok", "data": requests}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))

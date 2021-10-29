@@ -7,12 +7,38 @@ from ..config.database import db
 
 from ..schemas.requests_schema import requests_serializer
 from bson.objectid import ObjectId
-import FCMManager as fcm
-
-
+#import FCMManager as fcm
 import json
+import firebase_admin
+from firebase_admin import credentials,messaging
+import os
+import sys
 
 request_api_router = APIRouter()
+
+
+
+dir = os.path.dirname(__file__)
+filename = os.path.join(dir, "serviceaccountkey.json")
+print(filename)
+cred =credentials.Certificate(filename)
+firebase_admin.initialize_app(cred)
+
+def sendPush(title,msg,registration_token,dataObject=None):
+    message=messaging.MulticastMessage(
+        notification=messaging.Notification(
+            title=title,
+            body=msg
+        ),
+        data=dataObject,
+        tokens=registration_token,
+    )
+    response=messaging.send_multicast(message)
+
+    print("Successfully sent message:",response)
+
+
+
 
 @request_api_router.get("/")
 async def get_requests():
@@ -42,7 +68,7 @@ async def create_tenant(request:Request):
         db["requests"].insert_one(dict(request))
 
         if land:
-            fcm.sendPush(
+            sendPush(
                 "Tenant is requesting for address update.",
                 "Do you agree and would like to give authoriy to update address?",
                 land['fcm'],

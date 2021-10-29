@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aadhaar_address_update">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="aadhaar_address_update"
         android:icon="@mipmap/ic_launcher">

@@ -1,5 +1,8 @@
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
 import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/description_text_form_field.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/text_form_field.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,33 +18,16 @@ class TenantNotificationsWidget extends StatefulWidget {
 }
 
 class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
-  List<Color> colors = [
-    const Color(0xff006400),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF20505),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-  ];
+  bool disable = false;
+  bool buttonDisable = false;
+  final relationTextController = TextEditingController();
+  final messageTextController = TextEditingController();
+  final houseAddressTextController = TextEditingController();
+  final landmarkAddressTextController = TextEditingController();
+  final districtAddressTextController = TextEditingController();
+  final stateAddressTextController = TextEditingController();
+  final countryAddressTextController = TextEditingController();
+  final pincodeAddressTextController = TextEditingController();
 
   @override
   void initState() {
@@ -135,84 +121,317 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                               ? 0
                               : requestNotifications.data.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                color:
-                                    requestNotifications.data[index].status == 1
-                                        ? const Color(0xffF20505)
-                                        : requestNotifications
-                                                    .data[index].status ==
-                                                2
-                                            ? const Color(0xffF20505)
-                                            : const Color(0xffF2A413),
+                            return TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
                               ),
-                              padding: const EdgeInsets.only(
-                                top: 10,
-                                left: 10,
-                                bottom: 10,
-                                // right: 5,
-                              ),
-                              margin: EdgeInsets.only(
-                                bottom: displayHeight(context) * 0.015,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        requestNotifications
-                                            .data[index].relation,
-                                        style: GoogleFonts.montserrat(
-                                          color: Colors.white,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                              onPressed: () {
+                                if (requestNotifications.data[index].status ==
+                                    0) {
+                                  relationTextController.text =
+                                      requestNotifications.data[index].relation;
+                                  messageTextController.text =
+                                      requestNotifications.data[index].reason;
+                                  showModalBottomSheet<void>(
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
                                       ),
-                                      SizedBox(
-                                        height: displayHeight(context) * 0.01,
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return StatefulBuilder(
+                                        builder: (BuildContext context,
+                                            StateSetter setState) {
+                                          return SizedBox(
+                                            height:
+                                                displayHeight(context) * 0.65,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    displayWidth(context) *
+                                                        0.06,
+                                                vertical:
+                                                    displayHeight(context) *
+                                                        0.04,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Form(
+                                                    child: Column(
+                                                      children: [
+                                                        CustomTextFormField(
+                                                            title: 'Relation',
+                                                            hintText:
+                                                                'relation',
+                                                            textEditingController:
+                                                                relationTextController,
+                                                            disable: disable),
+                                                        DescriptionCustomTextFormField(
+                                                            title:
+                                                                'Your Message',
+                                                            hintText: 'message',
+                                                            textEditingController:
+                                                                messageTextController,
+                                                            disable: disable),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        displayHeight(context) *
+                                                            0.02,
+                                                  ),
+                                                  CustomElevatedButton(
+                                                    title: Text('Save Details',
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        )),
+                                                    onPressed: () {},
+                                                    disable: buttonDisable,
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        displayHeight(context) *
+                                                            0.01,
+                                                  ),
+                                                  CustomElevatedButton(
+                                                    color:
+                                                        const Color(0xffF20505),
+                                                    title: Text(
+                                                        'Delete Request',
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        )),
+                                                    onPressed: () {},
+                                                    disable: buttonDisable,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                } else if (requestNotifications
+                                        .data[index].status ==
+                                    1) {
+                                  //   landlordAddressTextController.text =
+                                  //       requestNotifications
+                                  //           .data[index].landlordAddress;
+                                  showModalBottomSheet<void>(
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
                                       ),
-                                      SizedBox(
-                                        width: displayWidth(context) * 0.52,
-                                        child: Text(
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return StatefulBuilder(
+                                        builder: (BuildContext context,
+                                            StateSetter setState) {
+                                          return SizedBox(
+                                            height:
+                                                displayHeight(context) * 0.78,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    displayWidth(context) *
+                                                        0.06,
+                                                vertical:
+                                                    displayHeight(context) *
+                                                        0.04,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Form(
+                                                    child: Column(
+                                                      children: [
+                                                        CustomTextFormField(
+                                                          title: 'H.No or Flat',
+                                                          hintText:
+                                                              'H.No or Flat',
+                                                          textEditingController:
+                                                              houseAddressTextController,
+                                                          disable: false,
+                                                        ),
+                                                        CustomTextFormField(
+                                                          title: 'Landmark',
+                                                          hintText: 'Landmark',
+                                                          textEditingController:
+                                                              landmarkAddressTextController,
+                                                          disable: false,
+                                                        ),
+                                                        CustomTextFormField(
+                                                          title: 'District',
+                                                          hintText: 'district',
+                                                          textEditingController:
+                                                              districtAddressTextController,
+                                                          disable: true,
+                                                        ),
+                                                        CustomTextFormField(
+                                                          title: 'State',
+                                                          hintText: 'state',
+                                                          textEditingController:
+                                                              stateAddressTextController,
+                                                          disable: true,
+                                                        ),
+                                                        CustomTextFormField(
+                                                          title: 'Pincode',
+                                                          hintText: 'pincode',
+                                                          textEditingController:
+                                                              pincodeAddressTextController,
+                                                          disable: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        displayHeight(context) *
+                                                            0.02,
+                                                  ),
+                                                  CustomElevatedButton(
+                                                    title: Text(
+                                                        'Verify and Submit Address',
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        )),
+                                                    onPressed: () {},
+                                                    disable: buttonDisable,
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        displayHeight(context) *
+                                                            0.01,
+                                                  ),
+                                                  CustomElevatedButton(
+                                                    color: Colors.red,
+                                                    title: Text(
+                                                        'Delete Request',
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        )),
+                                                    onPressed: () {},
+                                                    disable: buttonDisable,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Sorry! Your request has been rejected by Landlord',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  color:
+                                      requestNotifications.data[index].status ==
+                                              1
+                                          ? Colors.green
+                                          : requestNotifications
+                                                      .data[index].status ==
+                                                  2
+                                              ? Colors.red
+                                              : const Color(0xffF2A413),
+                                ),
+                                padding: const EdgeInsets.only(
+                                  top: 5,
+                                  left: 12,
+                                  bottom: 10,
+                                ),
+                                margin: EdgeInsets.only(
+                                  bottom: displayHeight(context) * 0.015,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
                                           requestNotifications
-                                              .data[index].reason,
+                                              .data[index].relation,
                                           style: GoogleFonts.montserrat(
                                             color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Transform(
-                                    transform: Matrix4.identity()..scale(0.78),
-                                    child: Chip(
-                                      label: Text(
-                                        requestNotifications
-                                                    .data[index].status ==
-                                                0
-                                            ? 'In Progress'
-                                            : requestNotifications
-                                                        .data[index].status ==
-                                                    1
-                                                ? 'Approved'
-                                                : 'Rejected',
-                                        overflow: TextOverflow.ellipsis,
+                                        Transform(
+                                          transform: Matrix4.identity()
+                                            ..scale(0.78),
+                                          child: Chip(
+                                            label: Text(
+                                              requestNotifications
+                                                          .data[index].status ==
+                                                      0
+                                                  ? 'In Progress'
+                                                  : requestNotifications
+                                                              .data[index]
+                                                              .status ==
+                                                          1
+                                                      ? 'Approved'
+                                                      : 'Rejected',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.montserrat(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            backgroundColor: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    // SizedBox(
+                                    //   height: displayHeight(context) * 0.01,
+                                    // ),
+                                    SizedBox(
+                                      width: displayWidth(context), // * 0.52,
+                                      child: Text(
+                                        requestNotifications.data[index].reason,
                                         style: GoogleFonts.montserrat(
                                           color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
                                         ),
                                       ),
-                                      backgroundColor: const Color(0xFFa3bdc4),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

@@ -7,11 +7,38 @@ from ..config.database import db
 
 from ..schemas.requests_schema import requests_serializer
 from bson.objectid import ObjectId
-
-
+#import FCMManager as fcm
 import json
+import firebase_admin
+from firebase_admin import credentials,messaging
+import os
+import sys
 
 request_api_router = APIRouter()
+
+
+
+dir = os.path.dirname(__file__)
+filename = os.path.join(dir, "serviceaccountkey.json")
+print(filename)
+cred =credentials.Certificate(filename)
+firebase_admin.initialize_app(cred)
+
+def sendPush(title,msg,registration_token,dataObject=None):
+    message=messaging.MulticastMessage(
+        notification=messaging.Notification(
+            title=title,
+            body=msg
+        ),
+        data=dataObject,
+        tokens=registration_token,
+    )
+    response=messaging.send_multicast(message)
+
+    print("Successfully sent message:",response)
+
+
+
 
 @request_api_router.get("/")
 async def get_requests():
@@ -26,7 +53,8 @@ async def get_requests():
 @request_api_router.post("/")
 async def create_tenant(request:Request):
     try:
-        if db["landlord"].find_one({"phone": int(request.landlord_uid)}):
+        land = db["landlord"].find_one({"phone": int(request.landlord_uid)})
+        if land:
             print("landlord exists")
         else:
             landlord={
@@ -36,7 +64,16 @@ async def create_tenant(request:Request):
                 "uid": ""
             }
             db["landlord"].insert_one(landlord)
+        
         db["requests"].insert_one(dict(request))
+
+        if land:
+            sendPush(
+                "Tenant is requesting for address update.",
+                "Do you agree and would like to give authoriy to update address?",
+                land['fcm'],
+            )
+
         return {"status":"ok","data": request}
         # fcm token here
 
@@ -47,7 +84,7 @@ async def create_tenant(request:Request):
 @request_api_router.post("/status_update")
 async def status_update(status:Status):
     try:
-        request_id = db["requests"].find_one({"landlord_uid": status.landlord_uid},{"status":0})
+        request_id=db["requests"].find_one({"landlord_uid": status.landlord_uid},{"status":0})
         if status.approval_status: 
             updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{

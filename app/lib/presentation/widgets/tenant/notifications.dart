@@ -365,69 +365,69 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                               : const Color(0xffF2A413),
                                 ),
                                 padding: const EdgeInsets.only(
-                                  top: 10,
-                                  left: 10,
+                                  top: 5,
+                                  left: 12,
                                   bottom: 10,
-                                  // right: 5,
                                 ),
                                 margin: EdgeInsets.only(
                                   bottom: displayHeight(context) * 0.015,
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
+                                    Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           requestNotifications
                                               .data[index].relation,
                                           style: GoogleFonts.montserrat(
                                             color: Colors.white,
-                                            fontSize: 13,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: displayHeight(context) * 0.01,
-                                        ),
-                                        SizedBox(
-                                          width: displayWidth(context) * 0.52,
-                                          child: Text(
-                                            requestNotifications
-                                                .data[index].reason,
-                                            style: GoogleFonts.montserrat(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300,
+                                        Transform(
+                                          transform: Matrix4.identity()
+                                            ..scale(0.78),
+                                          child: Chip(
+                                            label: Text(
+                                              requestNotifications
+                                                          .data[index].status ==
+                                                      0
+                                                  ? 'In Progress'
+                                                  : requestNotifications
+                                                              .data[index]
+                                                              .status ==
+                                                          1
+                                                      ? 'Approved'
+                                                      : 'Rejected',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.montserrat(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
+                                            backgroundColor: Colors.grey,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    Transform(
-                                      transform: Matrix4.identity()
-                                        ..scale(0.78),
-                                      child: Chip(
-                                        label: Text(
-                                          requestNotifications
-                                                      .data[index].status ==
-                                                  0
-                                              ? 'In Progress'
-                                              : requestNotifications
-                                                          .data[index].status ==
-                                                      1
-                                                  ? 'Approved'
-                                                  : 'Rejected',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.white,
-                                          ),
+                                    // SizedBox(
+                                    //   height: displayHeight(context) * 0.01,
+                                    // ),
+                                    SizedBox(
+                                      width: displayWidth(context), // * 0.52,
+                                      child: Text(
+                                        requestNotifications.data[index].reason,
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
                                         ),
-                                        backgroundColor:
-                                            const Color(0xFFa3bdc4),
                                       ),
                                     ),
                                   ],

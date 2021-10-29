@@ -11,7 +11,7 @@ class Request(BaseModel):
     landlord_uid: Optional[str]
     landlord_no: Optional[int]
     status: int
-    landlord_address: Address
+    landlord_address: Optional[Address]
     created: Optional[datetime]
     relation:str
     reason:str

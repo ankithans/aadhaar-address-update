@@ -7,6 +7,7 @@ from ..config.database import db
 
 from ..schemas.requests_schema import requests_serializer
 from bson.objectid import ObjectId
+import FCMManager as fcm
 
 
 import json
@@ -26,7 +27,8 @@ async def get_requests():
 @request_api_router.post("/")
 async def create_tenant(request:Request):
     try:
-        if db["landlord"].find_one({"phone": int(request.landlord_uid)}):
+        land = db["landlord"].find_one({"phone": int(request.landlord_uid)})
+        if land:
             print("landlord exists")
         else:
             landlord={
@@ -36,7 +38,16 @@ async def create_tenant(request:Request):
                 "uid": ""
             }
             db["landlord"].insert_one(landlord)
+        
         db["requests"].insert_one(dict(request))
+
+        if land:
+            fcm.sendPush(
+                "Tenant is requesting for address update.",
+                "Do you agree and would like to give authoriy to update address?",
+                land['fcm'],
+            )
+
         return {"status":"ok","data": request}
         # fcm token here
 
@@ -47,7 +58,7 @@ async def create_tenant(request:Request):
 @request_api_router.post("/status_update")
 async def status_update(status:Status):
     try:
-        request_id = db["requests"].find_one({"landlord_uid": status.landlord_uid},{"status":0})
+        request_id=db["requests"].find_one({"landlord_uid": status.landlord_uid},{"status":0})
         if status.approval_status: 
             updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{

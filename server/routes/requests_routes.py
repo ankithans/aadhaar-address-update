@@ -65,7 +65,7 @@ async def create_request(request:Request):
             }
             db["landlord"].insert_one(landlord)
         
-        request.landlord_address = dict(request.landlord_address)
+        # request.landlord_address = dict(request.landlord_address)
         db["requests"].insert_one(dict(request))
 
         if land:

@@ -92,9 +92,46 @@ class _TenantRequestState extends State<TenantRequest> {
                       context: context,
                       dialogType: DialogType.SUCCES,
                       animType: AnimType.SCALE,
-                      title: 'Request Successfull',
-                      desc:
-                          'We have sent a notification to Landlord regarding your request. Soon you will be recieving update on your request.',
+                      body: Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Request Successfull',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              height: displayHeight(context) * 0.01,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: displayWidth(context) * 0.07,
+                                ),
+                                SizedBox(
+                                  width: displayWidth(context) * 0.65,
+                                  child: Text(
+                                    'We have sent a notification to Landlord regarding your request. Soon you will be recieving update on your request.',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 12,
+                                      //   fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: displayWidth(context) * 0.005,
+                                ),
+                              ],
+                            ),
+                            // SizedBox(
+                            //   height: displayHeight(context) * 0.01,
+                            // ),
+                          ],
+                        ),
+                      ),
                       btnOkOnPress: () {},
                     ).show();
 

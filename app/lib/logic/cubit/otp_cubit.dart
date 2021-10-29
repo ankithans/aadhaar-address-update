@@ -1,7 +1,7 @@
-import 'package:aadhaar_address_update/data/models/ekyc_model.dart';
-import 'package:aadhaar_address_update/data/models/otp_model.dart';
-import 'package:aadhaar_address_update/data/models/tenant_input.dart';
-import 'package:aadhaar_address_update/data/models/tenant_login.dart';
+import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_model.dart';
+import 'package:aadhaar_address_update/data/models/aadhaar/otp_model.dart';
+import 'package:aadhaar_address_update/data/models/tenant/tenant_input.dart';
+import 'package:aadhaar_address_update/data/models/tenant/tenant_login.dart';
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';

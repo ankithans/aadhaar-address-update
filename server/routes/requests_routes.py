@@ -51,7 +51,7 @@ async def get_requests():
 
 
 @request_api_router.post("/")
-async def create_tenant(request:Request):
+async def create_request(request:Request):
     try:
         land = db["landlord"].find_one({"phone": int(request.landlord_uid)})
         if land:
@@ -65,6 +65,7 @@ async def create_tenant(request:Request):
             }
             db["landlord"].insert_one(landlord)
         
+        request.landlord_address = dict(request.landlord_address)
         db["requests"].insert_one(dict(request))
 
         if land:
@@ -89,7 +90,7 @@ async def status_update(status:Status):
             updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{
                     "status": 1,
-                    "landlord_address": status.landlord_address,
+                    "landlord_address": dict(status.landlord_address),
                     "updated": status.updated
                 }
             })

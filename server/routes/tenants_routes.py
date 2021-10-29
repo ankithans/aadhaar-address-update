@@ -65,9 +65,10 @@ async def get_tenant(phone:str):
 async def create_landlord(tenant: Tenant):
     try:
         tenantDetails = {}
+        
         if(db["tenant"].find_one({"phone": tenant.phone})):
             db["tenant"].update_one({"phone": int(tenant.phone)}, {
-                                    "$set": {"address": tenant.address, "fcm": tenant.fcm, "uid": tenant.uid}})
+                                    "$set": {"address": dict(tenant.address), "fcm": tenant.fcm, "uid": tenant.uid}})
             tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
             tenantDetails["id"] = str(ObjectId(tenants["_id"]))
             tenantDetails["address"] = tenants["address"]
@@ -75,6 +76,7 @@ async def create_landlord(tenant: Tenant):
             tenantDetails["phone"] = tenants["phone"]
             return {"status": "ok", "data": tenantDetails}
         else:
+            tenant.address = dict(tenant.address)
             db["tenant"].insert_one(dict(tenant))
             tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
             tenantDetails["id"] = str(ObjectId(tenants["_id"]))

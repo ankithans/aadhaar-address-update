@@ -89,6 +89,8 @@ async def create_request(request:Request):
             db["landlord"].insert_one(landlord)
         
         request.landlord_address = dict(request.landlord_address)
+        request.tenant_uid = encrypt(request.tenant_uid)
+        request.landlord_uid = uid
         db["requests"].insert_one(dict(request))
 
         return {"status":"ok","data": request}
@@ -101,10 +103,11 @@ async def create_request(request:Request):
 @request_api_router.post("/status_update")
 async def status_update(status:Status):
     try:
-        uid = encrypt(status.landlord_uid)
-        request_id=db["requests"].find_one({"landlord_uid": uid},{"status":0})
+        request_id=db["requests"].find_one({"_id":ObjectId(status.id)},{"status":0})
+        if request_id is None:
+            return {"status":"400", "data": "No In-Progress Request Found"}
         if status.approval_status: 
-            updateStat = db["requests"].update_one({"_id":ObjectId(request_id["_id"])},{
+            updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{
                     "status": 1,
                     "landlord_address": dict(status.landlord_address),
@@ -113,7 +116,7 @@ async def status_update(status:Status):
             })
             print(updateStat)
         else:
-            db["requests"].update_one({"_id":ObjectId(request_id["_id"])},{
+            db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{
                     "status": 2,
                     "updated": status.updated,
@@ -140,6 +143,7 @@ async def get_tenant_requests(tenant_uid):
     try:
         uid = encrypt(tenant_uid)
         requests = requests_serializer(db["requests"].find({"tenant_uid": uid}))
+        print(requests)
         return {"status": "ok", "data": requests}
     except Exception as e:
         print(e)
@@ -149,7 +153,7 @@ async def get_tenant_requests(tenant_uid):
 async def request_edit(Requestedit:Requestedit):
     try:
         request = db["requests"].find_one({"_id":ObjectId(Requestedit.request_id),"status": 0})
-        if encrypt(request["tenant_uid"]) == encrypt(Requestedit.tenant_uid):
+        if request["tenant_uid"] == encrypt(Requestedit.tenant_uid):
             db["requests"].update_one({"_id":ObjectId(Requestedit.request_id)},{
                 "$set":{
                     "updated": Requestedit.updated,
@@ -158,6 +162,7 @@ async def request_edit(Requestedit:Requestedit):
                 }
             })
             return {"status":"ok", "data": "request updated"}
+        return {"status":"401", "data": "user not authorised"}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))
@@ -166,7 +171,7 @@ async def request_edit(Requestedit:Requestedit):
 async def delete_request(Requestdelete:Requestdelete):
     try:
         request = db["requests"].find_one({"_id":ObjectId(Requestdelete.request_id)})
-        if encrypt(request["tenant_uid"]) == encrypt(Requestedit.tenant_uid):
+        if request["tenant_uid"] == encrypt(Requestdelete.tenant_uid):
             db["requests"].delete_one({"_id":ObjectId(Requestdelete.request_id)})
             return {"status":"ok", "data": "request deleted"}
         else:

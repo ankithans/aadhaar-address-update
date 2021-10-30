@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                 return Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CustomTextFormField(
                         disable: verifyDisable,
@@ -190,6 +190,24 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ),
+                      verify
+                          ? TextButton(
+                              onPressed: verifyDisable
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        verify = false;
+                                      });
+                                      otpTextController.clear();
+                                    },
+                              child: Text(
+                                'resend otp',
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xffF2A413)),
+                              ),
+                            )
+                          : Container()
                     ],
                   ),
                 );

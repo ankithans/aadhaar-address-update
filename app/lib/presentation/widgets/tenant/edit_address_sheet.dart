@@ -61,15 +61,18 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                         hintText: 'H.No or Flat',
                         textEditingController:
                             widget.houseAddressTextController,
-                        disable: false,
+                        disable: widget.requestNotifications.data[widget.index]
+                                .status ==
+                            3,
                       ),
                       CustomTextFormField(
-                        title: 'Landmark',
-                        hintText: 'Landmark',
-                        textEditingController:
-                            widget.landmarkAddressTextController,
-                        disable: false,
-                      ),
+                          title: 'Landmark',
+                          hintText: 'Landmark',
+                          textEditingController:
+                              widget.landmarkAddressTextController,
+                          disable: widget.requestNotifications
+                                  .data[widget.index].status ==
+                              3),
                       CustomTextFormField(
                         title: 'District',
                         hintText: 'district',
@@ -82,6 +85,13 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                         hintText: 'state',
                         textEditingController:
                             widget.stateAddressTextController,
+                        disable: true,
+                      ),
+                      CustomTextFormField(
+                        title: 'Country',
+                        hintText: 'country',
+                        textEditingController:
+                            widget.countryAddressTextController,
                         disable: true,
                       ),
                       CustomTextFormField(
@@ -135,7 +145,8 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                     widget.requestNotifications.data[widget.index].id,
                   );
                 },
-                disable: widget.buttonDisable,
+                disable:
+                    widget.requestNotifications.data[widget.index].status == 3,
               ),
             ],
           ),

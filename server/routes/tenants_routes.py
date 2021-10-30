@@ -55,7 +55,7 @@ async def create_landlord(tenant: Tenant):
             return {"status": "ok", "data": tenantDetails}
         else:
             tenantdata = {}
-            tenantdata["uid"] = uid
+            tenantdata["uid"] = tenant.uid
             tenantdata["address"] = tenant.address
             tenantdata["fcm"] = tenant.fcm
             tenantdata["phone"] = tenant.phone

@@ -40,17 +40,20 @@ class OtpCubit extends Cubit<OtpState> {
       String fcm = prefs.getString('fcm').toString();
       String phone = prefs.getString('phone').toString();
       //   Tenant login in database
-      String address = ekycPoa.house +
-          " " +
-          ekycPoa.loc +
-          " " +
-          ekycPoa.dist +
-          " " +
-          ekycPoa.country +
-          " " +
-          ekycPoa.pc.toString();
+
+      Address address = Address(
+        co: ekycPoa.co,
+        country: ekycPoa.country,
+        dist: ekycPoa.dist,
+        house: ekycPoa.house,
+        lm: ekycPoa.lm,
+        loc: ekycPoa.loc,
+        pc: ekycPoa.pc,
+        state: ekycPoa.state,
+        vtc: ekycPoa.vtc,
+      );
       TenantInput tenantInput = TenantInput(
-        address: "address",
+        address: address,
         phone: int.parse(phone),
         fcm: fcm,
         uid: uid,

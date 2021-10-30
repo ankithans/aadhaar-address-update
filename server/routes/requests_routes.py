@@ -88,6 +88,7 @@ async def create_request(request:Request):
             }
             db["landlord"].insert_one(landlord)
         
+        request.landlord_address = dict(request.landlord_address)
         db["requests"].insert_one(dict(request))
 
         return {"status":"ok","data": request}
@@ -106,7 +107,7 @@ async def status_update(status:Status):
             updateStat = db["requests"].update_one({"_id":ObjectId(request_id["_id"])},{
                 "$set":{
                     "status": 1,
-                    "landlord_address": status.landlord_address,
+                    "landlord_address": dict(status.landlord_address),
                     "updated": status.updated
                 }
             })
@@ -116,7 +117,7 @@ async def status_update(status:Status):
                 "$set":{
                     "status": 2,
                     "updated": status.updated,
-                    "landlord_address":""
+                    "landlord_address":{}
                 }
             })
         return {"status":"ok","data": status}

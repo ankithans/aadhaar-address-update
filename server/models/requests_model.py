@@ -4,12 +4,14 @@ from typing import Optional
 
 from pymongo import database
 
+from server.models.address_model import Address
+
 class Request(BaseModel):
     tenant_uid: str
     landlord_uid: Optional[str]
     landlord_no: Optional[int]
     status: int
-    landlord_address: Optional[str]
+    landlord_address: Optional[Address]
     created: Optional[datetime]
     relation:str
     reason:str

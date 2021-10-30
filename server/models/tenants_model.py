@@ -1,9 +1,11 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import Optional
+
+from server.models.address_model import Address
 
 class Tenant(BaseModel):
     # id: Optional[str] = Field(alias="_id")
-    address: Optional[str]
+    address: Address
     phone: int
     fcm: Optional[str]
     uid: Optional[str]

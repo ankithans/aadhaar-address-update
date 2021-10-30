@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from ..models.landlords_model import Landlord
-from ..config.database import collection_name, encrypt
+from ..config.database import collection_name, encrypt, decrypt
 
 from ..schemas.landlords_schema import landlords_serializer
 from bson.objectid import ObjectId
@@ -56,12 +56,12 @@ async def create_landlord(landlord: Landlord):
             landlordDetails["id"] = str(ObjectId(landlords["_id"]))
             landlordDetails["address"] = landlord.address
             landlordDetails["fcm"] = landlord.fcm
-            landlordDetails["uid"] = uid
+            landlordDetails["uid"] = landlord.uid
             landlordDetails["phone"] = landlord.phone
             return {"status": "ok", "data": landlordDetails}
         else:
             landlorddata={}
-            landlorddata["uid"]=uid
+            landlorddata["uid"]=landlord.uid
             landlorddata["address"] = landlord.address
             landlorddata["fcm"] = landlord.fcm
             landlorddata["phone"] = landlord.phone

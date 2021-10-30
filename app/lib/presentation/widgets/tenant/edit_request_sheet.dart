@@ -53,15 +53,17 @@ class _EditRequestSheetState extends State<EditRequestSheet> {
               child: Column(
                 children: [
                   CustomTextFormField(
-                      title: 'Relation',
-                      hintText: 'relation',
-                      textEditingController: widget.relationTextController,
-                      disable: widget.disable),
+                    title: 'Relation',
+                    hintText: 'relation',
+                    textEditingController: widget.relationTextController,
+                    disable: widget.disable,
+                  ),
                   DescriptionCustomTextFormField(
-                      title: 'Your Message',
-                      hintText: 'message',
-                      textEditingController: widget.messageTextController,
-                      disable: widget.disable),
+                    title: 'Your Message',
+                    hintText: 'message',
+                    textEditingController: widget.messageTextController,
+                    disable: widget.disable,
+                  ),
                 ],
               ),
             ),

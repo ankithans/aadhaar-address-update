@@ -111,8 +111,10 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                 if (state is TenantNotificationUpdateLoaded) {
                   isLoadingSheet = false;
                   Navigator.pop(context);
-                  BlocProvider.of<TenantNotifcationsCubit>(context)
-                      .getTenantNotifications();
+                  Future.delayed(const Duration(seconds: 1), () {
+                    BlocProvider.of<TenantNotifcationsCubit>(context)
+                        .getTenantNotifications();
+                  });
                 }
                 if (state is TenantNotificationUpdateFailure) {
                   isLoadingSheet = false;
@@ -324,9 +326,6 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                         ),
                                       ],
                                     ),
-                                    // SizedBox(
-                                    //   height: displayHeight(context) * 0.01,
-                                    // ),
                                     SizedBox(
                                       width: displayWidth(context), // * 0.52,
                                       child: Text(

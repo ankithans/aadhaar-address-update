@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 
+from server.models.address_model import Address
+
 from ..models.requests_model import Request, Requestdelete, Requestedit
 from ..models.status_model import Status
 from ..config.database import db, encrypt, decrypt
@@ -104,8 +106,15 @@ async def create_request(request:Request):
 async def status_update(status:Status):
     try:
         request_id=db["requests"].find_one({"_id":ObjectId(status.id)},{"status":0})
+       
+
         if request_id is None:
             return {"status":"400", "data": "No In-Progress Request Found"}
+
+        tenant_uid = request_id['tenant_uid']
+        tenant = db['tenant'].find_one({"uid": tenant_uid})
+        print(tenant)
+
         if status.approval_status: 
             updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{
@@ -114,15 +123,40 @@ async def status_update(status:Status):
                     "updated": status.updated
                 }
             })
+            
+            if tenant:
+                sendPush(
+                    "Congratulations! Landlord approved your request.",
+                    "Please follow the next steps to update your address.",
+                    [tenant['fcm']],
+                )
             print(updateStat)
         else:
+            address = {
+                "co": "",
+                "country": "",
+                "dist": "",
+                "house": "",
+                "lm": "",
+                "loc": "",
+                "pc": "",
+                "state": "",
+                "vtc": "",
+                "street": ""
+            }
             db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{
                     "status": 2,
                     "updated": status.updated,
-                    "landlord_address":{}
+                    "landlord_address": dict(address)
                 }
             })
+            if tenant:
+                sendPush(
+                    "We are sorry! Your request is rejected by Landlord",
+                    "You can create new request with appropriate details.",
+                    [tenant['fcm']],
+                )
         return {"status":"ok","data": status}
     except Exception as e:
         print(e)
@@ -161,6 +195,14 @@ async def request_edit(Requestedit:Requestedit):
                     "relation":Requestedit.relation
                 }
             })
+            landlord_uid = request['landlord_uid']
+            landlord = db["landlord"].find_one({"uid": landlord_uid})
+            if landlord:
+                sendPush(
+                        "Tenant updated the request.",
+                        "Do you agree and would like to give authoriy to update address?",
+                        [landlord['fcm']],
+                    )
             return {"status":"ok", "data": "request updated"}
         return {"status":"401", "data": "user not authorised"}
     except Exception as e:

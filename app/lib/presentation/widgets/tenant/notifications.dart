@@ -145,9 +145,11 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                       return StatefulBuilder(
                                         builder: (BuildContext context,
                                             StateSetter setState) {
-                                          return SizedBox(
-                                            height:
-                                                displayHeight(context) * 0.65,
+                                          return Container(
+                                            padding: MediaQuery.of(context)
+                                                .viewInsets,
+                                            // height:
+                                            //     displayHeight(context) * 0.65,
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
                                                 horizontal:
@@ -158,6 +160,7 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                                         0.04,
                                               ),
                                               child: Column(
+                                                mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
@@ -225,9 +228,24 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                 } else if (requestNotifications
                                         .data[index].status ==
                                     1) {
-                                  //   landlordAddressTextController.text =
-                                  //       requestNotifications
-                                  //           .data[index].landlordAddress;
+                                  houseAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.house;
+                                  landmarkAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.lm;
+                                  districtAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.dist;
+                                  stateAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.state;
+                                  countryAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.country;
+                                  pincodeAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.pc;
                                   showModalBottomSheet<void>(
                                     isScrollControlled: true,
                                     shape: const RoundedRectangleBorder(
@@ -241,9 +259,11 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                       return StatefulBuilder(
                                         builder: (BuildContext context,
                                             StateSetter setState) {
-                                          return SizedBox(
-                                            height:
-                                                displayHeight(context) * 0.78,
+                                          return Container(
+                                            padding: MediaQuery.of(context)
+                                                .viewInsets,
+                                            // height:
+                                            //     displayHeight(context) * 0.78,
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
                                                 horizontal:
@@ -253,91 +273,96 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                                     displayHeight(context) *
                                                         0.04,
                                               ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SingleChildScrollView(
-                                                    child: Form(
-                                                      child: Column(
-                                                        children: [
-                                                          CustomTextFormField(
-                                                            title:
-                                                                'H.No or Flat',
-                                                            hintText:
-                                                                'H.No or Flat',
-                                                            textEditingController:
-                                                                houseAddressTextController,
-                                                            disable: false,
-                                                          ),
-                                                          CustomTextFormField(
-                                                            title: 'Landmark',
-                                                            hintText:
-                                                                'Landmark',
-                                                            textEditingController:
-                                                                landmarkAddressTextController,
-                                                            disable: false,
-                                                          ),
-                                                          CustomTextFormField(
-                                                            title: 'District',
-                                                            hintText:
-                                                                'district',
-                                                            textEditingController:
-                                                                districtAddressTextController,
-                                                            disable: true,
-                                                          ),
-                                                          CustomTextFormField(
-                                                            title: 'State',
-                                                            hintText: 'state',
-                                                            textEditingController:
-                                                                stateAddressTextController,
-                                                            disable: true,
-                                                          ),
-                                                          CustomTextFormField(
-                                                            title: 'Pincode',
-                                                            hintText: 'pincode',
-                                                            textEditingController:
-                                                                pincodeAddressTextController,
-                                                            disable: true,
-                                                          ),
-                                                        ],
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SingleChildScrollView(
+                                                      child: Form(
+                                                        child: Column(
+                                                          children: [
+                                                            CustomTextFormField(
+                                                              title:
+                                                                  'H.No or Flat',
+                                                              hintText:
+                                                                  'H.No or Flat',
+                                                              textEditingController:
+                                                                  houseAddressTextController,
+                                                              disable: false,
+                                                            ),
+                                                            CustomTextFormField(
+                                                              title: 'Landmark',
+                                                              hintText:
+                                                                  'Landmark',
+                                                              textEditingController:
+                                                                  landmarkAddressTextController,
+                                                              disable: false,
+                                                            ),
+                                                            CustomTextFormField(
+                                                              title: 'District',
+                                                              hintText:
+                                                                  'district',
+                                                              textEditingController:
+                                                                  districtAddressTextController,
+                                                              disable: true,
+                                                            ),
+                                                            CustomTextFormField(
+                                                              title: 'State',
+                                                              hintText: 'state',
+                                                              textEditingController:
+                                                                  stateAddressTextController,
+                                                              disable: true,
+                                                            ),
+                                                            CustomTextFormField(
+                                                              title: 'Pincode',
+                                                              hintText:
+                                                                  'pincode',
+                                                              textEditingController:
+                                                                  pincodeAddressTextController,
+                                                              disable: true,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.02,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    title: Text(
-                                                        'Verify and Submit Address',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.01,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    color: Colors.red,
-                                                    title: Text(
-                                                        'Delete Request',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                ],
+                                                    SizedBox(
+                                                      height: displayHeight(
+                                                              context) *
+                                                          0.02,
+                                                    ),
+                                                    CustomElevatedButton(
+                                                      title: Text(
+                                                          'Verify and Submit Address',
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          )),
+                                                      onPressed: () {},
+                                                      disable: buttonDisable,
+                                                    ),
+                                                    SizedBox(
+                                                      height: displayHeight(
+                                                              context) *
+                                                          0.01,
+                                                    ),
+                                                    CustomElevatedButton(
+                                                      color: Colors.red,
+                                                      title: Text(
+                                                          'Delete Request',
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          )),
+                                                      onPressed: () {},
+                                                      disable: buttonDisable,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );

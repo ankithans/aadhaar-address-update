@@ -116,10 +116,15 @@ async def status_update(status:Status):
         print(tenant)
 
         if status.approval_status: 
+            landlord_uid = request_id["landlord_uid"]
+            landlord = db["landlord"].find_one({"uid": landlord_uid})
+            if landlord is None:
+                return {"status":"400", "data": "No landlord found"}
+
             updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{
                     "status": 1,
-                    "landlord_address": dict(status.landlord_address),
+                    "landlord_address": landlord['address'],
                     "updated": status.updated
                 }
             })

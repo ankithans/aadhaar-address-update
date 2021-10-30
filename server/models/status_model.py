@@ -8,5 +8,5 @@ class Status(BaseModel):
     id: str
     landlord_uid: str
     approval_status: bool
-    landlord_address: Address
+    # landlord_address: Address
     updated: datetime

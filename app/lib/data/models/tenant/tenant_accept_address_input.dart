@@ -1,55 +1,26 @@
-class TenantLogin {
-  TenantLogin({
-    required this.status,
-    required this.data,
-  });
-  late final String status;
-  late final Data data;
-
-  TenantLogin.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    data = Data.fromJson(json['data']);
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['status'] = status;
-    _data['data'] = data.toJson();
-    return _data;
-  }
-}
-
-class Data {
-  Data({
-    required this.id,
+class TenantAcceptAddressInput {
+  TenantAcceptAddressInput({
     required this.address,
-    required this.fcm,
-    required this.phone,
+    required this.uid,
   });
-  late final String id;
-  late final Address1 address;
-  late final String fcm;
-  late final int phone;
+  late final Address address;
+  late final String uid;
 
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    address = Address1.fromJson(json['address']);
-    fcm = json['fcm'];
-    phone = json['phone'];
+  TenantAcceptAddressInput.fromJson(Map<String, dynamic> json) {
+    address = Address.fromJson(json['address']);
+    uid = json['uid'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['id'] = id;
     _data['address'] = address.toJson();
-    _data['fcm'] = fcm;
-    _data['phone'] = phone;
+    _data['uid'] = uid;
     return _data;
   }
 }
 
-class Address1 {
-  Address1({
+class Address {
+  Address({
     required this.co,
     required this.country,
     required this.dist,
@@ -65,14 +36,14 @@ class Address1 {
   late final String country;
   late final String dist;
   late final String house;
-  late final lm;
+  late final String lm;
   late final String loc;
   late final String pc;
   late final String state;
   late final String vtc;
-  late final street;
+  late final String street;
 
-  Address1.fromJson(Map<String, dynamic> json) {
+  Address.fromJson(Map<String, dynamic> json) {
     co = json['co'];
     country = json['country'];
     dist = json['dist'];

@@ -16,34 +16,6 @@ class LandlordNotifications extends StatefulWidget {
 }
 
 class _LandlordNotificationsState extends State<LandlordNotifications> {
-  List<Color> colors = [
-    const Color(0xff006400),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF20505),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-    const Color(0xffF2A413),
-  ];
-
   @override
   void initState() {
     BlocProvider.of<TenantNotifcationsCubit>(context)
@@ -59,7 +31,7 @@ class _LandlordNotificationsState extends State<LandlordNotifications> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: displayWidth(context) * 0.08,
+          horizontal: displayWidth(context) * 0.07,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +197,11 @@ class _LandlordNotificationsState extends State<LandlordNotifications> {
                                                       .data[index].status ==
                                                   2
                                               ? Colors.red
-                                              : const Color(0xffF2A413),
+                                              : requestNotifications
+                                                          .data[index].status ==
+                                                      3
+                                                  ? Colors.green
+                                                  : const Color(0xffF2A413),
                                 ),
                                 padding: const EdgeInsets.only(
                                   top: 5,
@@ -267,7 +243,12 @@ class _LandlordNotificationsState extends State<LandlordNotifications> {
                                                               .status ==
                                                           1
                                                       ? 'Approved'
-                                                      : 'Rejected',
+                                                      : requestNotifications
+                                                                  .data[index]
+                                                                  .status ==
+                                                              3
+                                                          ? 'Completed'
+                                                          : 'Rejected',
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.montserrat(
                                                 color: Colors.white,

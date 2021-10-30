@@ -85,7 +85,7 @@ async def create_request(request:Request):
 @request_api_router.post("/status_update")
 async def status_update(status:Status):
     try:
-        request_id=db["requests"].find_one({"landlord_uid": status.landlord_uid},{"status":0})
+        request_id=db["requests"].find_one({ObjectId(Status.id)},{"status":0})
         if status.approval_status: 
             updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
                 "$set":{

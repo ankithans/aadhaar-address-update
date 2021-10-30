@@ -257,46 +257,51 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Form(
-                                                    child: Column(
-                                                      children: [
-                                                        CustomTextFormField(
-                                                          title: 'H.No or Flat',
-                                                          hintText:
-                                                              'H.No or Flat',
-                                                          textEditingController:
-                                                              houseAddressTextController,
-                                                          disable: false,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'Landmark',
-                                                          hintText: 'Landmark',
-                                                          textEditingController:
-                                                              landmarkAddressTextController,
-                                                          disable: false,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'District',
-                                                          hintText: 'district',
-                                                          textEditingController:
-                                                              districtAddressTextController,
-                                                          disable: true,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'State',
-                                                          hintText: 'state',
-                                                          textEditingController:
-                                                              stateAddressTextController,
-                                                          disable: true,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'Pincode',
-                                                          hintText: 'pincode',
-                                                          textEditingController:
-                                                              pincodeAddressTextController,
-                                                          disable: true,
-                                                        ),
-                                                      ],
+                                                  SingleChildScrollView(
+                                                    child: Form(
+                                                      child: Column(
+                                                        children: [
+                                                          CustomTextFormField(
+                                                            title:
+                                                                'H.No or Flat',
+                                                            hintText:
+                                                                'H.No or Flat',
+                                                            textEditingController:
+                                                                houseAddressTextController,
+                                                            disable: false,
+                                                          ),
+                                                          CustomTextFormField(
+                                                            title: 'Landmark',
+                                                            hintText:
+                                                                'Landmark',
+                                                            textEditingController:
+                                                                landmarkAddressTextController,
+                                                            disable: false,
+                                                          ),
+                                                          CustomTextFormField(
+                                                            title: 'District',
+                                                            hintText:
+                                                                'district',
+                                                            textEditingController:
+                                                                districtAddressTextController,
+                                                            disable: true,
+                                                          ),
+                                                          CustomTextFormField(
+                                                            title: 'State',
+                                                            hintText: 'state',
+                                                            textEditingController:
+                                                                stateAddressTextController,
+                                                            disable: true,
+                                                          ),
+                                                          CustomTextFormField(
+                                                            title: 'Pincode',
+                                                            hintText: 'pincode',
+                                                            textEditingController:
+                                                                pincodeAddressTextController,
+                                                            disable: true,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(

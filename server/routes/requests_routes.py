@@ -89,6 +89,8 @@ async def create_request(request:Request):
             db["landlord"].insert_one(landlord)
         
         request.landlord_address = dict(request.landlord_address)
+        request.tenant_uid = encrypt(request.tenant_uid)
+        request.landlord_uid = uid
         db["requests"].insert_one(dict(request))
 
         return {"status":"ok","data": request}
@@ -140,6 +142,7 @@ async def get_tenant_requests(tenant_uid):
     try:
         uid = encrypt(tenant_uid)
         requests = requests_serializer(db["requests"].find({"tenant_uid": uid}))
+        print(requests)
         return {"status": "ok", "data": requests}
     except Exception as e:
         print(e)

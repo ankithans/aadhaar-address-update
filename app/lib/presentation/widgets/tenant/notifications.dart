@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'edit_request_sheet.dart';
+
 class TenantNotificationsWidget extends StatefulWidget {
   const TenantNotificationsWidget({Key? key}) : super(key: key);
 
@@ -36,6 +38,7 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
   }
 
   bool isLoading = false;
+  bool isLoadingSheet = false;
   TenantNotifications requestNotifications =
       TenantNotifications(status: "", data: []);
 
@@ -103,6 +106,42 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                     ),
                   );
                 }
+
+                if (state is TenantNotificationUpdateLoading) {
+                  isLoadingSheet = true;
+                }
+                if (state is TenantNotificationUpdateLoaded) {
+                  isLoadingSheet = false;
+                  Navigator.pop(context);
+                  BlocProvider.of<TenantNotifcationsCubit>(context)
+                      .getTenantNotifications();
+                }
+                if (state is TenantNotificationUpdateFailure) {
+                  isLoadingSheet = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.err),
+                    ),
+                  );
+                }
+
+                if (state is TenantNotificationDeleteLoading) {
+                  isLoadingSheet = true;
+                }
+                if (state is TenantNotificationDeleteLoaded) {
+                  isLoadingSheet = false;
+                  Navigator.pop(context);
+                  BlocProvider.of<TenantNotifcationsCubit>(context)
+                      .getTenantNotifications();
+                }
+                if (state is TenantNotificationDeleteFailure) {
+                  isLoadingSheet = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.err),
+                    ),
+                  );
+                }
               },
               builder: (context, state) {
                 return state is TenantNotificationsLoading
@@ -144,83 +183,18 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                     builder: (BuildContext context) {
                                       return StatefulBuilder(
                                         builder: (BuildContext context,
-                                            StateSetter setState) {
-                                          return Container(
-                                            padding: MediaQuery.of(context)
-                                                .viewInsets,
-                                            // height:
-                                            //     displayHeight(context) * 0.65,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal:
-                                                    displayWidth(context) *
-                                                        0.06,
-                                                vertical:
-                                                    displayHeight(context) *
-                                                        0.04,
-                                              ),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Form(
-                                                    child: Column(
-                                                      children: [
-                                                        CustomTextFormField(
-                                                            title: 'Relation',
-                                                            hintText:
-                                                                'relation',
-                                                            textEditingController:
-                                                                relationTextController,
-                                                            disable: disable),
-                                                        DescriptionCustomTextFormField(
-                                                            title:
-                                                                'Your Message',
-                                                            hintText: 'message',
-                                                            textEditingController:
-                                                                messageTextController,
-                                                            disable: disable),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.02,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    title: Text('Save Details',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.01,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    color:
-                                                        const Color(0xffF20505),
-                                                    title: Text(
-                                                        'Delete Request',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
+                                            StateSetter setState1) {
+                                          return EditRequestSheet(
+                                              index: index,
+                                              disable: disable,
+                                              isLoadingSheet: isLoadingSheet,
+                                              buttonDisable: buttonDisable,
+                                              relationTextController:
+                                                  relationTextController,
+                                              messageTextController:
+                                                  messageTextController,
+                                              requestNotifications:
+                                                  requestNotifications);
                                         },
                                       );
                                     },

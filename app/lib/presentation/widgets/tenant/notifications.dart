@@ -1,8 +1,6 @@
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
 import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
-import 'package:aadhaar_address_update/presentation/widgets/common/description_text_form_field.dart';
-import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
-import 'package:aadhaar_address_update/presentation/widgets/common/text_form_field.dart';
+import 'package:aadhaar_address_update/presentation/widgets/tenant/edit_address_sheet.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -233,112 +231,18 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                       return StatefulBuilder(
                                         builder: (BuildContext context,
                                             StateSetter setState) {
-                                          return Container(
-                                            padding: MediaQuery.of(context)
-                                                .viewInsets,
-                                            // height:
-                                            //     displayHeight(context) * 0.78,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal:
-                                                    displayWidth(context) *
-                                                        0.06,
-                                                vertical:
-                                                    displayHeight(context) *
-                                                        0.04,
-                                              ),
-                                              child: SingleChildScrollView(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    SingleChildScrollView(
-                                                      child: Form(
-                                                        child: Column(
-                                                          children: [
-                                                            CustomTextFormField(
-                                                              title:
-                                                                  'H.No or Flat',
-                                                              hintText:
-                                                                  'H.No or Flat',
-                                                              textEditingController:
-                                                                  houseAddressTextController,
-                                                              disable: false,
-                                                            ),
-                                                            CustomTextFormField(
-                                                              title: 'Landmark',
-                                                              hintText:
-                                                                  'Landmark',
-                                                              textEditingController:
-                                                                  landmarkAddressTextController,
-                                                              disable: false,
-                                                            ),
-                                                            CustomTextFormField(
-                                                              title: 'District',
-                                                              hintText:
-                                                                  'district',
-                                                              textEditingController:
-                                                                  districtAddressTextController,
-                                                              disable: true,
-                                                            ),
-                                                            CustomTextFormField(
-                                                              title: 'State',
-                                                              hintText: 'state',
-                                                              textEditingController:
-                                                                  stateAddressTextController,
-                                                              disable: true,
-                                                            ),
-                                                            CustomTextFormField(
-                                                              title: 'Pincode',
-                                                              hintText:
-                                                                  'pincode',
-                                                              textEditingController:
-                                                                  pincodeAddressTextController,
-                                                              disable: true,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: displayHeight(
-                                                              context) *
-                                                          0.02,
-                                                    ),
-                                                    CustomElevatedButton(
-                                                      title: Text(
-                                                          'Verify and Submit Address',
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          )),
-                                                      onPressed: () {},
-                                                      disable: buttonDisable,
-                                                    ),
-                                                    SizedBox(
-                                                      height: displayHeight(
-                                                              context) *
-                                                          0.01,
-                                                    ),
-                                                    CustomElevatedButton(
-                                                      color: Colors.red,
-                                                      title: Text(
-                                                          'Delete Request',
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          )),
-                                                      onPressed: () {},
-                                                      disable: buttonDisable,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                          return EditAddressSheet(
+                                            buttonDisable: buttonDisable,
+                                            houseAddressTextController:
+                                                houseAddressTextController,
+                                            landmarkAddressTextController:
+                                                landmarkAddressTextController,
+                                            districtAddressTextController:
+                                                districtAddressTextController,
+                                            stateAddressTextController:
+                                                stateAddressTextController,
+                                            pincodeAddressTextController:
+                                                pincodeAddressTextController,
                                           );
                                         },
                                       );

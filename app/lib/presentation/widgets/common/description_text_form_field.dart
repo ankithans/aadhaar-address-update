@@ -48,6 +48,7 @@ class _DescriptionCustomTextFormFieldState
             maxLines: 10,
             style: GoogleFonts.montserrat(
               fontSize: 14,
+              color: widget.disable ? Colors.grey : Colors.black,
             ),
             controller: widget.textEditingController,
             validator: (value) {

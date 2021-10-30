@@ -45,6 +45,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             enabled: !widget.disable,
             style: GoogleFonts.montserrat(
               fontSize: 14,
+              color: widget.disable ? Colors.grey : Colors.black,
             ),
             controller: widget.textEditingController,
             validator: (value) {

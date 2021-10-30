@@ -142,6 +142,26 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                     ),
                   );
                 }
+
+                if (state is TenantNotificationSubmitLoading) {
+                  isLoadingSheet = true;
+                }
+                if (state is TenantNotificationSubmitLoaded) {
+                  isLoadingSheet = false;
+                  Navigator.pop(context);
+                  Future.delayed(const Duration(seconds: 1), () {
+                    BlocProvider.of<TenantNotifcationsCubit>(context)
+                        .getTenantNotifications();
+                  });
+                }
+                if (state is TenantNotificationSubmitFailure) {
+                  isLoadingSheet = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.err),
+                    ),
+                  );
+                }
               },
               builder: (context, state) {
                 return state is TenantNotificationsLoading
@@ -234,6 +254,8 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                         builder: (BuildContext context,
                                             StateSetter setState) {
                                           return EditAddressSheet(
+                                            countryAddressTextController:
+                                                countryAddressTextController,
                                             index: index,
                                             requestNotifications:
                                                 requestNotifications,

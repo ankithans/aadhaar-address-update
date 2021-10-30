@@ -1,3 +1,4 @@
+import 'package:aadhaar_address_update/data/models/tenant/tenant_accept_address_input.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_request_update_input.dart';
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
@@ -66,6 +67,46 @@ class TenantNotifcationsCubit extends Cubit<TenantNotifcationsState> {
       emit(TenantNotificationDeleteLoaded());
     } catch (e) {
       emit(TenantNotificationDeleteFailure(err: e.toString()));
+    }
+  }
+
+  tenantAcceptAddress(
+    String country,
+    String dist,
+    String house,
+    String lm,
+    String loc,
+    String pc,
+    String state,
+    String vtc,
+    String street,
+  ) async {
+    try {
+      emit(TenantNotificationSubmitLoading());
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String uid = prefs.getString('tenantUID').toString();
+
+      TenantAcceptAddressInput tenantAcceptAddressInput =
+          TenantAcceptAddressInput(
+        address: Address(
+          co: "",
+          country: country,
+          dist: dist,
+          house: house,
+          lm: lm,
+          loc: loc,
+          pc: pc,
+          state: state,
+          vtc: vtc,
+          street: street,
+        ),
+        uid: uid,
+      );
+      await apiClient.tenantAcceptAddress(tenantAcceptAddressInput);
+
+      emit(TenantNotificationSubmitLoaded());
+    } catch (e) {
+      emit(TenantNotificationSubmitFailure(err: e.toString()));
     }
   }
 }

@@ -14,6 +14,7 @@ class EditAddressSheet extends StatefulWidget {
   TextEditingController districtAddressTextController;
   TextEditingController stateAddressTextController;
   TextEditingController pincodeAddressTextController;
+  TextEditingController countryAddressTextController;
   TenantNotifications requestNotifications;
   int index;
 
@@ -25,6 +26,7 @@ class EditAddressSheet extends StatefulWidget {
     required this.districtAddressTextController,
     required this.stateAddressTextController,
     required this.pincodeAddressTextController,
+    required this.countryAddressTextController,
     required this.requestNotifications,
     required this.index,
   }) : super(key: key);
@@ -101,8 +103,22 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w500,
                     )),
-                onPressed: () {},
-                disable: widget.buttonDisable,
+                onPressed: () {
+                  BlocProvider.of<TenantNotifcationsCubit>(context)
+                      .tenantAcceptAddress(
+                    widget.countryAddressTextController.text,
+                    widget.districtAddressTextController.text,
+                    widget.houseAddressTextController.text,
+                    widget.landmarkAddressTextController.text,
+                    widget.landmarkAddressTextController.text,
+                    widget.pincodeAddressTextController.text,
+                    widget.stateAddressTextController.text,
+                    'vtc',
+                    'street',
+                  );
+                },
+                disable:
+                    widget.requestNotifications.data[widget.index].status == 3,
               ),
               SizedBox(
                 height: displayHeight(context) * 0.01,

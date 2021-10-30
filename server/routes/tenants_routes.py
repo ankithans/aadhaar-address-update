@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
+from server.models.address_model import Address
+
 from ..models.tenants_model import Tenant, UpdateAddress
 from ..config.database import db, encrypt
 
@@ -45,7 +47,7 @@ async def create_landlord(tenant: Tenant):
         uid = encrypt(tenant.uid)
         if(db["tenant"].find_one({"uid": uid})):
             db["tenant"].update_one({"uid": uid}, {
-                                    "$set": {"address": dict(tenant.address), "fcm": tenant.fcm, "uid":uid, "phone":tenant.phone}})
+                                    "$set": {"address": dict(tenant.address), "fcm": tenant.fcm, "uid": uid, "phone": tenant.phone}})
             tenants = db["tenant"].find_one({"uid": uid})
             tenantDetails["id"] = str(ObjectId(tenants["_id"]))
             tenantDetails["address"] = tenants["address"]
@@ -68,14 +70,21 @@ async def create_landlord(tenant: Tenant):
         print(e)
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @tenant_api_router.post("/accept_address")
-async def update_tenant_address(UpdateAddress:UpdateAddress):
+async def update_tenant_address(UpdateAddress: UpdateAddress):
     try:
         uid = encrypt(UpdateAddress.uid)
-        request_id = db["requests"].find_one({"tenant_uid":uid, "status": 1})
+        request_id = db["requests"].find_one({"tenant_uid": uid, "status": 1})
         if request_id is None:
-            return {"status":"400","data":"No Address Update Permited"}
-        print(request_id["address"])
+            return {"status": "400", "data": "No Address Update Permited"}
+        if UpdateAddress.address.house and request_id["landlord_address"]["country"] == UpdateAddress.address.country and request_id["landlord_address"]["dist"] == UpdateAddress.address.dist and request_id["landlord_address"]["lm"] == UpdateAddress.address.lm and request_id["landlord_address"]["loc"] == UpdateAddress.address.loc and request_id["landlord_address"]["pc"] == UpdateAddress.address.pc and request_id["landlord_address"]["state"] == UpdateAddress.address.state and request_id["landlord_address"]["vtc"] == UpdateAddress.address.vtc and request_id["landlord_address"]["street"] == UpdateAddress.address.street:
+            db["tenant"].update_one({"uid":uid}, {"$set":{
+                "address": dict(UpdateAddress.address)
+            }})
+            return {"status":"200","data":UpdateAddress.address}
+        else:
+            return {"status":"501","data":"Unprocessible Entity"}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))

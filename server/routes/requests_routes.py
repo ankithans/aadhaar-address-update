@@ -65,7 +65,7 @@ async def create_request(request:Request):
                 sendPush(
                     "Tenant is requesting for address update.",
                     "Do you agree and would like to give authoriy to update address?",
-                    land['fcm'],
+                    [land['fcm']],
                 )
         elif request.landlord_no:
             phone = request.landlord_no
@@ -77,7 +77,7 @@ async def create_request(request:Request):
                 sendPush(
                     "Tenant is requesting for address update.",
                     "Do you agree and would like to give authoriy to update address?",
-                    land['fcm'],
+                    [land['fcm']],
                 )
         else:
             landlord={

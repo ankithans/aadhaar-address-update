@@ -96,7 +96,6 @@ async def create_request(request:Request):
         db["requests"].insert_one(dict(request))
 
         return {"status":"ok","data": request}
-        # fcm token here
 
     except Exception as e:
         print(e)

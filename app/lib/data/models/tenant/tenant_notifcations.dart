@@ -95,15 +95,15 @@ class LandlordAddress {
   late final String vtc;
 
   LandlordAddress.fromJson(Map<String, dynamic> json) {
-    co = json['co'];
-    country = json['country'];
-    dist = json['dist'];
-    house = json['house'];
-    lm = json['lm'];
-    loc = json['loc'];
-    pc = json['pc'];
-    state = json['state'];
-    vtc = json['vtc'];
+    co = json['co'] ?? "";
+    country = json['country'] ?? "";
+    dist = json['dist'] ?? "";
+    house = json['house'] ?? "";
+    lm = json['lm'] ?? "";
+    loc = json['loc'] ?? "";
+    pc = json['pc'] ?? "";
+    state = json['state'] ?? "";
+    vtc = json['vtc'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

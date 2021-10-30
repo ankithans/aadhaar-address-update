@@ -43,32 +43,36 @@ async def get_landlord(Landlord_uid):
 
 # b'$2b$12$VWXW6zS2m3WY/GBx8Vo8h.2nlCmqu0Z9MRmnaCXzffw/94k5Z.ZKi'
 #
+
+
 @landlord_api_router.post("/login")
 async def create_landlord(landlord: Landlord):
     try:
-        uid = encrypt(landlord.uid)
-        print(uid)
         landlordDetails = {}
+        uid = encrypt(landlord.uid)
         if(collection_name.find_one({"uid": uid})):
             collection_name.update_one({"uid": uid}, {
-                "$set": {"address": landlord.address, "fcm": landlord.fcm, "uid": uid, "phone": landlord.phone}})
-            landlords = collection_name.find_one({"uid": uid})
+                "$set": {"address": dict(landlord.address), "fcm": landlord.fcm, "uid": uid, "phone": landlord.phone}})
+            landlords = collection_name.find_one(
+                {"uid": uid})
             landlordDetails["id"] = str(ObjectId(landlords["_id"]))
-            landlordDetails["address"] = landlord.address
-            landlordDetails["fcm"] = landlord.fcm
+            landlordDetails["address"] = landlords["address"]
+            landlordDetails["fcm"] = landlords["fcm"]
+            landlordDetails["phone"] = landlords["phone"]
             landlordDetails["uid"] = landlord.uid
-            landlordDetails["phone"] = landlord.phone
             return {"status": "ok", "data": landlordDetails}
         else:
-            landlorddata={}
-            landlorddata["uid"]=landlord.uid
-            landlorddata["address"] = landlord.address
-            landlorddata["fcm"] = landlord.fcm
-            landlorddata["phone"] = landlord.phone
-            collection_name.insert_one(dict(landlorddata))
-            landlords = collection_name.find_one({"uid": uid})
-            landlorddata["id"] = str(ObjectId(landlords["_id"]))
-            return {"status": "ok", "data": landlorddata}
+            landlord.address = dict(landlord.address)
+            landlord.uid = encrypt(landlord.uid)
+            collection_name.insert_one(dict(landlord))
+            landlords = collection_name.find_one(
+                {"phone": int(landlord.phone)})
+            landlordDetails["id"] = str(ObjectId(landlords["_id"]))
+            landlordDetails["address"] = landlords["address"]
+            landlordDetails["fcm"] = landlords["fcm"]
+            landlordDetails["phone"] = landlords["phone"]
+            landlordDetails["uid"] = landlord.uid
+            return {"status": "ok", "data": landlordDetails}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))

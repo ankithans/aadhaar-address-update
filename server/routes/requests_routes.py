@@ -58,7 +58,7 @@ async def create_request(request:Request):
             print("landlord exists")
         else:
             landlord={
-                "address":"",
+                "address":{},
                 "phone": request.landlord_uid,
                 "fcm": "",
                 "uid": ""
@@ -100,7 +100,7 @@ async def status_update(status:Status):
                 "$set":{
                     "status": 2,
                     "updated": status.updated,
-                    "landlord_address":""
+                    "landlord_address":{}
                 }
             })
         return {"status":"ok","data": status}

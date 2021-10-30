@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from ..models.tenants_model import Tenant
+from ..models.tenants_model import Tenant, UpdateAddress
 from ..config.database import db, encrypt
 
 from ..schemas.tenants_schema import tenants_serializer
@@ -64,6 +64,18 @@ async def create_landlord(tenant: Tenant):
             tenantDetails["uid"] = tenant.uid
             tenantDetails["phone"] = tenants["phone"]
             return {"status": "ok", "data": tenantDetails}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+@tenant_api_router.post("/accept_address")
+async def update_tenant_address(UpdateAddress:UpdateAddress):
+    try:
+        uid = encrypt(UpdateAddress.uid)
+        request_id = db["requests"].find_one({"tenant_uid":uid, "status": 1})
+        if request_id is None:
+            return {"status":"400","data":"No Address Update Permited"}
+        print(request_id["address"])
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))

@@ -9,6 +9,7 @@ import 'package:aadhaar_address_update/data/models/tenant/tenant_login.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_request.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_request_input.dart';
+import 'package:aadhaar_address_update/data/models/tenant/tenant_request_update_input.dart';
 
 import 'package:aadhaar_address_update/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
@@ -109,7 +110,32 @@ class APIClient {
   Future<TenantNotifications> tenantNotifications(String uid) async {
     try {
       var response = await Dio().get(restURI + 'requests/tenant/' + uid);
+      print(response.data);
       return TenantNotifications.fromJson(response.data);
+    } on DioError catch (e) {
+      var error = json.decode(e.response.toString());
+      throw error;
+    }
+  }
+
+  tenantRequestUpdate(TenantRequestUpdateInput tenantRequestUpdateInput) async {
+    try {
+      var response = await Dio()
+          .put(restURI + 'requests/', data: tenantRequestUpdateInput);
+      print(response.data);
+    } on DioError catch (e) {
+      var error = json.decode(e.response.toString());
+      throw error;
+    }
+  }
+
+  tenantRequestDelete(String requestId, String uid) async {
+    try {
+      var response = await Dio().delete(restURI + 'requests/', data: {
+        "request_id": requestId,
+        "tenant_uid": uid,
+      });
+      print(response.data);
     } on DioError catch (e) {
       var error = json.decode(e.response.toString());
       throw error;

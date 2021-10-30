@@ -6,12 +6,14 @@ class CustomElevatedButton extends StatefulWidget {
   final Widget title;
   final Function onPressed;
   final bool disable;
+  Color? color;
 
-  const CustomElevatedButton({
+  CustomElevatedButton({
     Key? key,
     required this.title,
     required this.onPressed,
     required this.disable,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
         height: displayHeight(context) * 0.055,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: const Color(0xffF2A413),
+            primary: widget.color ?? const Color(0xffF2A413),
             elevation: 0,
           ),
           onPressed: widget.disable ? null : () => widget.onPressed(),

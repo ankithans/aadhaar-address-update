@@ -75,11 +75,8 @@ class _DescriptionCustomTextFormFieldState
                 left: 14.0,
                 bottom: 10.0,
                 top: 25.0,
+                right: 5.0,
               ),
-              //   contentPadding: const EdgeInsets.symmetric(
-              //     vertical: 40.0,
-              //     horizontal: 14.0,
-              //   ),
             ),
           ),
         ],

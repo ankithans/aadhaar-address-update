@@ -45,7 +45,7 @@ async def create_landlord(landlord: Landlord):
         landlordDetails = {}
         if(collection_name.find_one({"phone": landlord.phone})):
             collection_name.update_one({"phone": int(landlord.phone)}, {
-                                    "$set": {"address": landlord.address, "fcm": landlord.fcm, "uid": landlord.uid}})
+                                    "$set": {"address": dict(landlord.address), "fcm": landlord.fcm, "uid": landlord.uid}})
             landlords = collection_name.find_one({"phone": int(landlord.phone)})
             landlordDetails["id"] = str(ObjectId(landlords["_id"]))
             landlordDetails["address"] = landlords["address"]
@@ -53,6 +53,7 @@ async def create_landlord(landlord: Landlord):
             landlordDetails["phone"] = landlords["phone"]
             return {"status": "ok", "data": landlordDetails}
         else:
+            landlord.address = dict(landlord.address)
             collection_name.insert_one(dict(landlord))
             landlords = collection_name.find_one({"phone": int(landlord.phone)})
             landlordDetails["id"] = str(ObjectId(landlords["_id"]))

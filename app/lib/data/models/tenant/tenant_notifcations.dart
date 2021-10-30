@@ -83,6 +83,7 @@ class LandlordAddress {
     required this.pc,
     required this.state,
     required this.vtc,
+    required this.street,
   });
   late final String co;
   late final String country;
@@ -93,6 +94,7 @@ class LandlordAddress {
   late final String pc;
   late final String state;
   late final String vtc;
+  late final String street;
 
   LandlordAddress.fromJson(Map<String, dynamic> json) {
     co = json['co'] ?? "";
@@ -117,6 +119,7 @@ class LandlordAddress {
     _data['pc'] = pc;
     _data['state'] = state;
     _data['vtc'] = vtc;
+    _data['street'] = street;
     return _data;
   }
 }

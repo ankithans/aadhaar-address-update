@@ -9,3 +9,7 @@ class Tenant(BaseModel):
     phone: int
     fcm: Optional[str]
     uid: Optional[str]
+
+class UpdateAddress(BaseModel):
+    address: Address
+    uid: str

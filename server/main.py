@@ -11,12 +11,12 @@ tags_metadata = [
             collection."
     },
     {
-        "name": "Tenant",
+        "name": "Tenants",
         "description": "Endpoints related to operations on the **Tenants**\
             collection."
     },
     {
-        "name": "Request",
+        "name": "Requests",
         "description": "Endpoints related to operations on the **Requests**\
             collection."
     }
@@ -36,8 +36,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app = FastAPI()
 
 app.include_router(landlord_api_router,
                    prefix="/landlords", tags=["Landlords"])

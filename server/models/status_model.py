@@ -5,6 +5,7 @@ from typing import Optional
 from server.models.address_model import Address
 
 class Status(BaseModel):
+    id: str
     landlord_uid: str
     approval_status: bool
     landlord_address: Address

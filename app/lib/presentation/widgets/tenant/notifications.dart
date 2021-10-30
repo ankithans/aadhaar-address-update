@@ -1,13 +1,13 @@
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
 import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
-import 'package:aadhaar_address_update/presentation/widgets/common/description_text_form_field.dart';
-import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
-import 'package:aadhaar_address_update/presentation/widgets/common/text_form_field.dart';
+import 'package:aadhaar_address_update/presentation/widgets/tenant/edit_address_sheet.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'edit_request_sheet.dart';
 
 class TenantNotificationsWidget extends StatefulWidget {
   const TenantNotificationsWidget({Key? key}) : super(key: key);
@@ -36,6 +36,7 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
   }
 
   bool isLoading = false;
+  bool isLoadingSheet = false;
   TenantNotifications requestNotifications =
       TenantNotifications(status: "", data: []);
 
@@ -103,6 +104,44 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                     ),
                   );
                 }
+
+                if (state is TenantNotificationUpdateLoading) {
+                  isLoadingSheet = true;
+                }
+                if (state is TenantNotificationUpdateLoaded) {
+                  isLoadingSheet = false;
+                  Navigator.pop(context);
+                  Future.delayed(const Duration(seconds: 1), () {
+                    BlocProvider.of<TenantNotifcationsCubit>(context)
+                        .getTenantNotifications();
+                  });
+                }
+                if (state is TenantNotificationUpdateFailure) {
+                  isLoadingSheet = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.err),
+                    ),
+                  );
+                }
+
+                if (state is TenantNotificationDeleteLoading) {
+                  isLoadingSheet = true;
+                }
+                if (state is TenantNotificationDeleteLoaded) {
+                  isLoadingSheet = false;
+                  Navigator.pop(context);
+                  BlocProvider.of<TenantNotifcationsCubit>(context)
+                      .getTenantNotifications();
+                }
+                if (state is TenantNotificationDeleteFailure) {
+                  isLoadingSheet = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.err),
+                    ),
+                  );
+                }
               },
               builder: (context, state) {
                 return state is TenantNotificationsLoading
@@ -144,80 +183,18 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                     builder: (BuildContext context) {
                                       return StatefulBuilder(
                                         builder: (BuildContext context,
-                                            StateSetter setState) {
-                                          return SizedBox(
-                                            height:
-                                                displayHeight(context) * 0.65,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal:
-                                                    displayWidth(context) *
-                                                        0.06,
-                                                vertical:
-                                                    displayHeight(context) *
-                                                        0.04,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Form(
-                                                    child: Column(
-                                                      children: [
-                                                        CustomTextFormField(
-                                                            title: 'Relation',
-                                                            hintText:
-                                                                'relation',
-                                                            textEditingController:
-                                                                relationTextController,
-                                                            disable: disable),
-                                                        DescriptionCustomTextFormField(
-                                                            title:
-                                                                'Your Message',
-                                                            hintText: 'message',
-                                                            textEditingController:
-                                                                messageTextController,
-                                                            disable: disable),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.02,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    title: Text('Save Details',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.01,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    color:
-                                                        const Color(0xffF20505),
-                                                    title: Text(
-                                                        'Delete Request',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
+                                            StateSetter setState1) {
+                                          return EditRequestSheet(
+                                              index: index,
+                                              disable: disable,
+                                              isLoadingSheet: isLoadingSheet,
+                                              buttonDisable: buttonDisable,
+                                              relationTextController:
+                                                  relationTextController,
+                                              messageTextController:
+                                                  messageTextController,
+                                              requestNotifications:
+                                                  requestNotifications);
                                         },
                                       );
                                     },
@@ -225,9 +202,24 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                 } else if (requestNotifications
                                         .data[index].status ==
                                     1) {
-                                  //   landlordAddressTextController.text =
-                                  //       requestNotifications
-                                  //           .data[index].landlordAddress;
+                                  houseAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.house;
+                                  landmarkAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.lm;
+                                  districtAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.dist;
+                                  stateAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.state;
+                                  countryAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.country;
+                                  pincodeAddressTextController.text =
+                                      requestNotifications
+                                          .data[index].landlordAddress.pc;
                                   showModalBottomSheet<void>(
                                     isScrollControlled: true,
                                     shape: const RoundedRectangleBorder(
@@ -241,100 +233,21 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                       return StatefulBuilder(
                                         builder: (BuildContext context,
                                             StateSetter setState) {
-                                          return SizedBox(
-                                            height:
-                                                displayHeight(context) * 0.78,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal:
-                                                    displayWidth(context) *
-                                                        0.06,
-                                                vertical:
-                                                    displayHeight(context) *
-                                                        0.04,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Form(
-                                                    child: Column(
-                                                      children: [
-                                                        CustomTextFormField(
-                                                          title: 'H.No or Flat',
-                                                          hintText:
-                                                              'H.No or Flat',
-                                                          textEditingController:
-                                                              houseAddressTextController,
-                                                          disable: false,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'Landmark',
-                                                          hintText: 'Landmark',
-                                                          textEditingController:
-                                                              landmarkAddressTextController,
-                                                          disable: false,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'District',
-                                                          hintText: 'district',
-                                                          textEditingController:
-                                                              districtAddressTextController,
-                                                          disable: true,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'State',
-                                                          hintText: 'state',
-                                                          textEditingController:
-                                                              stateAddressTextController,
-                                                          disable: true,
-                                                        ),
-                                                        CustomTextFormField(
-                                                          title: 'Pincode',
-                                                          hintText: 'pincode',
-                                                          textEditingController:
-                                                              pincodeAddressTextController,
-                                                          disable: true,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.02,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    title: Text(
-                                                        'Verify and Submit Address',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        displayHeight(context) *
-                                                            0.01,
-                                                  ),
-                                                  CustomElevatedButton(
-                                                    color: Colors.red,
-                                                    title: Text(
-                                                        'Delete Request',
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                    onPressed: () {},
-                                                    disable: buttonDisable,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                          return EditAddressSheet(
+                                            index: index,
+                                            requestNotifications:
+                                                requestNotifications,
+                                            buttonDisable: buttonDisable,
+                                            houseAddressTextController:
+                                                houseAddressTextController,
+                                            landmarkAddressTextController:
+                                                landmarkAddressTextController,
+                                            districtAddressTextController:
+                                                districtAddressTextController,
+                                            stateAddressTextController:
+                                                stateAddressTextController,
+                                            pincodeAddressTextController:
+                                                pincodeAddressTextController,
                                           );
                                         },
                                       );
@@ -416,9 +329,6 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                         ),
                                       ],
                                     ),
-                                    // SizedBox(
-                                    //   height: displayHeight(context) * 0.01,
-                                    // ),
                                     SizedBox(
                                       width: displayWidth(context), // * 0.52,
                                       child: Text(

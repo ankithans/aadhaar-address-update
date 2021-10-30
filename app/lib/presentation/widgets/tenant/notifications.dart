@@ -234,6 +234,9 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                         builder: (BuildContext context,
                                             StateSetter setState) {
                                           return EditAddressSheet(
+                                            index: index,
+                                            requestNotifications:
+                                                requestNotifications,
                                             buttonDisable: buttonDisable,
                                             houseAddressTextController:
                                                 houseAddressTextController,

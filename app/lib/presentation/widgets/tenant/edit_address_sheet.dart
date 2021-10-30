@@ -1,7 +1,10 @@
+import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
+import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
 import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
 import 'package:aadhaar_address_update/presentation/widgets/common/text_form_field.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditAddressSheet extends StatefulWidget {
@@ -11,6 +14,8 @@ class EditAddressSheet extends StatefulWidget {
   TextEditingController districtAddressTextController;
   TextEditingController stateAddressTextController;
   TextEditingController pincodeAddressTextController;
+  TenantNotifications requestNotifications;
+  int index;
 
   EditAddressSheet({
     Key? key,
@@ -20,6 +25,8 @@ class EditAddressSheet extends StatefulWidget {
     required this.districtAddressTextController,
     required this.stateAddressTextController,
     required this.pincodeAddressTextController,
+    required this.requestNotifications,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -106,7 +113,12 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w500,
                     )),
-                onPressed: () {},
+                onPressed: () {
+                  BlocProvider.of<TenantNotifcationsCubit>(context)
+                      .deleteTenantRequest(
+                    widget.requestNotifications.data[widget.index].id,
+                  );
+                },
                 disable: widget.buttonDisable,
               ),
             ],

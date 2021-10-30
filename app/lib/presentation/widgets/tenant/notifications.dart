@@ -220,8 +220,10 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                     },
                                   );
                                 } else if (requestNotifications
-                                        .data[index].status ==
-                                    1) {
+                                            .data[index].status ==
+                                        1 ||
+                                    requestNotifications.data[index].status ==
+                                        3) {
                                   houseAddressTextController.text =
                                       requestNotifications
                                           .data[index].landlordAddress.house;
@@ -297,7 +299,11 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                                       .data[index].status ==
                                                   2
                                               ? Colors.red
-                                              : const Color(0xffF2A413),
+                                              : requestNotifications
+                                                          .data[index].status ==
+                                                      3
+                                                  ? Colors.green
+                                                  : const Color(0xffF2A413),
                                 ),
                                 padding: const EdgeInsets.only(
                                   top: 5,
@@ -339,7 +345,12 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                                                               .status ==
                                                           1
                                                       ? 'Approved'
-                                                      : 'Rejected',
+                                                      : requestNotifications
+                                                                  .data[index]
+                                                                  .status ==
+                                                              3
+                                                          ? 'Completed'
+                                                          : 'Rejected',
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.montserrat(
                                                 color: Colors.white,

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from ..models.requests_model import Request, Requestdelete, Requestedit
 from ..models.status_model import Status
-from ..config.database import db
+from ..config.database import db, encrypt, decrypt
 
 from ..schemas.requests_schema import requests_serializer
 from bson.objectid import ObjectId
@@ -51,28 +51,44 @@ async def get_requests():
 
 
 @request_api_router.post("/")
-async def create_tenant(request:Request):
+async def create_request(request:Request):
     try:
-        land = db["landlord"].find_one({"phone": int(request.landlord_uid)})
-        if land:
-            print("landlord exists")
+        uid = ""
+        phone = ""
+        if request.landlord_uid:
+            if request.landlord_uid == request.tenant_uid:
+                return {"status": "400", "data": "tenant and landlord cannot be same."}
+            uid = encrypt(request.landlord_uid)
+            land = db["landlord"].find_one({"uid": uid})
+            if land:
+                print("landlord exists")
+                sendPush(
+                    "Tenant is requesting for address update.",
+                    "Do you agree and would like to give authoriy to update address?",
+                    land['fcm'],
+                )
+        elif request.landlord_no:
+            phone = request.landlord_no
+            land = db["landlord"].find_one({"phone": phone})
+            if decrypt(land["uid"]) == request.tenant_uid:
+                return {"status": "400", "data": "tenant and landlord cannot be same."}
+            if land:
+                print("landlord exists")
+                sendPush(
+                    "Tenant is requesting for address update.",
+                    "Do you agree and would like to give authoriy to update address?",
+                    land['fcm'],
+                )
         else:
             landlord={
                 "address":"",
-                "phone": request.landlord_uid,
+                "phone": phone,
                 "fcm": "",
-                "uid": ""
+                "uid": uid
             }
             db["landlord"].insert_one(landlord)
         
         db["requests"].insert_one(dict(request))
-
-        if land:
-            sendPush(
-                "Tenant is requesting for address update.",
-                "Do you agree and would like to give authoriy to update address?",
-                land['fcm'],
-            )
 
         return {"status":"ok","data": request}
         # fcm token here
@@ -84,9 +100,10 @@ async def create_tenant(request:Request):
 @request_api_router.post("/status_update")
 async def status_update(status:Status):
     try:
-        request_id=db["requests"].find_one({"landlord_uid": status.landlord_uid},{"status":0})
+        uid = encrypt(status.landlord_uid)
+        request_id=db["requests"].find_one({"landlord_uid": uid},{"status":0})
         if status.approval_status: 
-            updateStat = db["requests"].update_one({"_id":request_id["_id"]},{
+            updateStat = db["requests"].update_one({"_id":ObjectId(request_id["_id"])},{
                 "$set":{
                     "status": 1,
                     "landlord_address": status.landlord_address,
@@ -95,7 +112,7 @@ async def status_update(status:Status):
             })
             print(updateStat)
         else:
-            db["requests"].update_one({"_id":request_id["_id"]},{
+            db["requests"].update_one({"_id":ObjectId(request_id["_id"])},{
                 "$set":{
                     "status": 2,
                     "updated": status.updated,
@@ -108,18 +125,20 @@ async def status_update(status:Status):
         raise HTTPException(status_code=400, detail=str(e))
 
 @request_api_router.get("/landlord/{landlord_uid}")
-async def get_landlord_requests(landlord_uid:str):
+async def get_landlord_requests(landlord_uid):
     try:
-        requests = requests_serializer(db["requests"].find({"landlord_uid": str(landlord_uid)}))
+        uid = encrypt(landlord_uid)
+        requests = requests_serializer(db["requests"].find({"landlord_uid": uid}))
         return {"status": "ok", "data": requests}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 @request_api_router.get("/tenant/{tenant_uid}")
-async def get_tenant_requests(tenant_uid:str):
+async def get_tenant_requests(tenant_uid):
     try:
-        requests = requests_serializer(db["requests"].find({"tenant_uid": str(tenant_uid)}))
+        uid = encrypt(tenant_uid)
+        requests = requests_serializer(db["requests"].find({"tenant_uid": uid}))
         return {"status": "ok", "data": requests}
     except Exception as e:
         print(e)
@@ -129,7 +148,7 @@ async def get_tenant_requests(tenant_uid:str):
 async def request_edit(Requestedit:Requestedit):
     try:
         request = db["requests"].find_one({"_id":ObjectId(Requestedit.request_id),"status": 0})
-        if str(request["tenant_uid"]) == str(Requestedit.tenant_uid):
+        if encrypt(request["tenant_uid"]) == encrypt(Requestedit.tenant_uid):
             db["requests"].update_one({"_id":ObjectId(Requestedit.request_id)},{
                 "$set":{
                     "updated": Requestedit.updated,
@@ -146,7 +165,7 @@ async def request_edit(Requestedit:Requestedit):
 async def delete_request(Requestdelete:Requestdelete):
     try:
         request = db["requests"].find_one({"_id":ObjectId(Requestdelete.request_id)})
-        if str(request["tenant_uid"]) == str(Requestdelete.tenant_uid):
+        if encrypt(request["tenant_uid"]) == encrypt(Requestedit.tenant_uid):
             db["requests"].delete_one({"_id":ObjectId(Requestdelete.request_id)})
             return {"status":"ok", "data": "request deleted"}
         else:

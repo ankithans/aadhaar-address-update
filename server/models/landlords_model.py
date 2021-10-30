@@ -4,6 +4,6 @@ from typing import Optional
 class Landlord(BaseModel):
     # id: Optional[str] = Field(alias="_id")
     address: Optional[str]
-    phone: int
+    phone: Optional[int]
     fcm: Optional[str]
     uid: Optional[str]

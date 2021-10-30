@@ -51,7 +51,9 @@ class OtpCubit extends Cubit<OtpState> {
         pc: ekycPoa.pc,
         state: ekycPoa.state,
         vtc: ekycPoa.vtc,
+        street: ekycPoa.street,
       );
+
       TenantInput tenantInput = TenantInput(
         address: address,
         phone: int.parse(phone),
@@ -69,6 +71,7 @@ class OtpCubit extends Cubit<OtpState> {
 
       emit(EkycRecievedState());
     } catch (e) {
+      print(e);
       emit(EkycFailureState(err: e.toString()));
     }
   }

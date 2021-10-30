@@ -38,16 +38,18 @@ class Address {
     required this.pc,
     required this.state,
     required this.vtc,
+    required this.street,
   });
   late final String co;
   late final String country;
   late final String dist;
   late final String house;
-  late final String lm;
+  late final lm;
   late final String loc;
   late final String pc;
   late final String state;
   late final String vtc;
+  late final street;
 
   Address.fromJson(Map<String, dynamic> json) {
     co = json['co'];
@@ -59,6 +61,7 @@ class Address {
     pc = json['pc'];
     state = json['state'];
     vtc = json['vtc'];
+    street = json['street'];
   }
 
   Map<String, dynamic> toJson() {
@@ -72,6 +75,7 @@ class Address {
     _data['pc'] = pc;
     _data['state'] = state;
     _data['vtc'] = vtc;
+    _data['street'] = street;
     return _data;
   }
 }

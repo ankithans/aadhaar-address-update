@@ -99,7 +99,7 @@ class APIClient {
     try {
       var response =
           await Dio().post(restURI + 'requests/', data: tenantRequestInput);
-
+      print(response.data);
       return TenantRequest.fromJson(response.data);
     } on DioError catch (e) {
       var error = json.decode(e.response.toString());

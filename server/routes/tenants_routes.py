@@ -80,7 +80,8 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
             return {"status": "400", "data": "No Address Update Permited"}
         if UpdateAddress.address.house and request_id["landlord_address"]["country"] == UpdateAddress.address.country and request_id["landlord_address"]["dist"] == UpdateAddress.address.dist and request_id["landlord_address"]["lm"] == UpdateAddress.address.lm and request_id["landlord_address"]["loc"] == UpdateAddress.address.loc and request_id["landlord_address"]["pc"] == UpdateAddress.address.pc and request_id["landlord_address"]["state"] == UpdateAddress.address.state and request_id["landlord_address"]["vtc"] == UpdateAddress.address.vtc and request_id["landlord_address"]["street"] == UpdateAddress.address.street:
             db["tenant"].update_one({"uid":uid}, {"$set":{
-                "address": dict(UpdateAddress.address)
+                "address": dict(UpdateAddress.address),
+                "status":3
             }})
             return {"status":"200","data":UpdateAddress.address}
         else:

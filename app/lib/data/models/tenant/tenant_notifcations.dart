@@ -106,6 +106,7 @@ class LandlordAddress {
     pc = json['pc'] ?? "";
     state = json['state'] ?? "";
     vtc = json['vtc'] ?? "";
+    street = json['street'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

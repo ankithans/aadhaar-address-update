@@ -66,13 +66,12 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                             3,
                       ),
                       CustomTextFormField(
-                          title: 'Landmark',
-                          hintText: 'Landmark',
-                          textEditingController:
-                              widget.landmarkAddressTextController,
-                          disable: widget.requestNotifications
-                                  .data[widget.index].status ==
-                              3),
+                        title: 'Landmark',
+                        hintText: 'Landmark',
+                        textEditingController:
+                            widget.landmarkAddressTextController,
+                        disable: true,
+                      ),
                       CustomTextFormField(
                         title: 'District',
                         hintText: 'district',
@@ -114,6 +113,29 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                       fontWeight: FontWeight.w500,
                     )),
                 onPressed: () {
+                  String landlordAddress = widget.requestNotifications
+                          .data[widget.index].landlordAddress.house +
+                      " " +
+                      widget.requestNotifications.data[widget.index]
+                          .landlordAddress.street +
+                      " " +
+                      widget.requestNotifications.data[widget.index]
+                          .landlordAddress.lm +
+                      " " +
+                      //   widget.requestNotifications.data[widget.index]
+                      //       .landlordAddress.loc +
+                      //   " " +
+                      widget.requestNotifications.data[widget.index]
+                          .landlordAddress.dist +
+                      " " +
+                      widget.requestNotifications.data[widget.index]
+                          .landlordAddress.state +
+                      " " +
+                      widget.requestNotifications.data[widget.index]
+                          .landlordAddress.country +
+                      " " +
+                      widget.requestNotifications.data[widget.index]
+                          .landlordAddress.pc;
                   BlocProvider.of<TenantNotifcationsCubit>(context)
                       .tenantAcceptAddress(
                     widget.countryAddressTextController.text,
@@ -123,8 +145,11 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                     widget.landmarkAddressTextController.text,
                     widget.pincodeAddressTextController.text,
                     widget.stateAddressTextController.text,
-                    'vtc',
-                    'street',
+                    widget.requestNotifications.data[widget.index]
+                        .landlordAddress.vtc,
+                    widget.requestNotifications.data[widget.index]
+                        .landlordAddress.street,
+                    landlordAddress,
                   );
                 },
                 disable:

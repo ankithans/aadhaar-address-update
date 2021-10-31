@@ -1,3 +1,4 @@
+from typing import final
 from fastapi import APIRouter, HTTPException
 from server.auditLog.auditlog import pushAudit
 
@@ -19,12 +20,19 @@ import sys
 import googlemaps
 from dotenv import load_dotenv
 from fastapi import Body
+from twilio.rest import Client
 
 request_api_router = APIRouter()
 
 load_dotenv()
 key=os.getenv("key")
 gmaps = googlemaps.Client(key)
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+twilio_phone_num=os.getenv('TWILIO_PHONE_NUMBER')
+
+client = Client(account_sid, auth_token)
+
 
 
 dir = os.path.dirname(__file__)
@@ -141,6 +149,11 @@ async def create_request(request: Request):
                     "Do you agree and would like to give authoriy to update address?",
                     [land['fcm']],
                 )
+                final_num="+91-"+str(land["phone"])
+                print(final_num)
+                client.messages.create(from_=twilio_phone_num,
+                                       to=final_num,
+                                       body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')
             else:
                 landlord = {
                 "address": "",
@@ -167,6 +180,10 @@ async def create_request(request: Request):
                     "Do you agree and would like to give authoriy to update address?",
                     [land['fcm']],
                     )
+                    final_num="+91-"+str(land["phone"])
+                    client.messages.create(from_=twilio_phone_num,
+                                       to=final_num,
+                                       body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')
                 
             else:
                 landlord = {
@@ -247,6 +264,10 @@ async def status_update(status: Status):
                     "Please follow the next steps to update your address.",
                     [tenant['fcm']],
                 )
+                final_num="+91-"+str(tenant["phone"])
+                client.messages.create(from_=twilio_phone_num,
+                                       to=final_num,
+                                       body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')
         else:
             address = {
                 "co": "",
@@ -275,6 +296,10 @@ async def status_update(status: Status):
                     "You can create new request with appropriate details.",
                     [tenant['fcm']],
                 )
+                final_num="+91-"+str(tenant["phone"])
+                client.messages.create(from_=twilio_phone_num,
+                                       to=final_num,
+                                       body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')
         return {"status": "ok", "data": status}
     except Exception as e:
         print(e)
@@ -354,6 +379,10 @@ async def request_edit(Requestedit: Requestedit):
                     "Do you agree and would like to give authoriy to update address?",
                     [landlord_id['fcm']],
                 )
+                final_num="+91-"+str(landlord_id["phone"])
+                client.messages.create(from_=twilio_phone_num,
+                                       to=final_num,
+                                       body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')
             return {"status": "ok", "data": "request updated"}
         description = "Fraudulent Case - Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") made falls attempt to edit Request (id: "+ str(ObjectId(request["_id"]))+ "), Unauthorized"
         pushAudit("Danger", description)

@@ -206,8 +206,11 @@ async def create_request(request: Request):
         print(request.landlord_address)
         request.tenant_uid = encrypt(request.tenant_uid)
         request.landlord_uid = uid
+        print("pre")
         db["requests"].insert_one(dict(request))
+        print("post")
         request_id = db["requests"].find_one({"tenant_uid": request.tenant_uid, "status": 0})
+        print(request_id)
         description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") made request (id: "+str(ObjectId(request_id["_id"]))+" ) to Landlord (id: "+str(ObjectId(land["_id"]))+" )"
         pushAudit("Succesful", description)
         return {"status": "ok", "data": request}

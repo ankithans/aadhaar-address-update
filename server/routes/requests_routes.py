@@ -110,11 +110,17 @@ def sendPush(title, msg, registration_token, dataObject=None):
 async def create_request(request: Request):
     try:
         uid = ""
-        phone = ""
-        print(request)
+        phone = 0
         tenant_uid = encrypt(request.tenant_uid)
         tenant_id =db["tenant"].find_one({"uid": tenant_uid})
-        if len(request.landlord_uid) == 12:
+        checkrequest1 = db["requests"].find_one({"tenant_uid": request.tenant_uid, "status": 0})
+        checkrequest2 = db["requests"].find_one({"tenant_uid": request.tenant_uid, "status": 1})
+        if checkrequest1 or checkrequest2:
+            description = "Fraudulent Case - Tenant (id: " + str(ObjectId(
+                        tenant_id["_id"]))+" ) made falls attempt to Create New Request, Already one request in progress. "
+            pushAudit("Danger", description)
+            return {"status": "400", "data": "Already one request in-progress."}
+        if request.landlord_uid:
             uid = encrypt(request.landlord_uid)
             land = db["landlord"].find_one({"uid": uid})
             if land:
@@ -128,31 +134,43 @@ async def create_request(request: Request):
                     "Do you agree and would like to give authoriy to update address?",
                     [land['fcm']],
                 )
+            else:
+                landlord = {
+                "address": "",
+                "phone": int(phone),
+                "fcm": "",
+                "uid": str(uid)
+                }
+                db["landlord"].insert_one(landlord)
+                landlord_id = db["landlord"].find_one({"phone": int(phone)})
+                description = "Landlord (id: "+str(ObjectId(landlord_id["_id"]))+") Created"
+                pushAudit("succesful", description)
         elif request.landlord_no:
-            # print(request.)
             phone = request.landlord_no
-            land = db["landlord"].find_one({"phone": phone})
-            print(land)
+            land = db["landlord"].find_one({"phone": int(phone)})
             if land:
                 if decrypt(land["uid"]) == request.tenant_uid:
                     description = "Fraudulent Case - Tenant (id: " + str(ObjectId(
                         tenant_id["_id"]))+" ) made falls attempt to Create Request, Tenant and landlord are same. "
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
-                if land:
+                else :
                     sendPush(
                     "Tenant is requesting for address update.",
                     "Do you agree and would like to give authoriy to update address?",
                     [land['fcm']],
                     )
+                
             else:
                 landlord = {
                 "address": "",
-                "phone": phone,
+                "phone": int(phone),
                 "fcm": "",
-                    "uid": uid
-                    }
-                landlord_id = db["landlord"].insert_one(landlord)
+                "uid": str(uid)
+                }
+                db["landlord"].insert_one(landlord)
+                landlord_id = db["landlord"].find_one({"phone": int(phone)})
+                print(landlord_id)
                 description = "Landlord (id: "+str(ObjectId(landlord_id["_id"]))+") Created"
                 pushAudit("succesful", description)
         else:
@@ -163,7 +181,8 @@ async def create_request(request: Request):
         request.landlord_address = dict(request.landlord_address)
         request.tenant_uid = encrypt(request.tenant_uid)
         request.landlord_uid = uid
-        request_id = db["requests"].insert_one(dict(request))
+        db["requests"].insert_one(dict(request))
+        request_id = db["requests"].find_one({"tenant_uid": request.tenant_uid, "status": 0})
         description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") made request (id: "+str(ObjectId(request_id["_id"]))+" ) to Landlord (id: "+str(ObjectId(land["_id"]))+" )"
         pushAudit("Succesful", description)
         return {"status": "ok", "data": request}
@@ -180,9 +199,16 @@ async def status_update(status: Status):
     try:
         request_id = db["requests"].find_one(
             {"_id": ObjectId(status.id)}, {"status": 0})
-        landlord_id = db["landlord"].find_one({
+        landlord_no = request_id["landlord_no"]
+        if landlord_no == 0:
+            landlord_id = db["landlord"].find_one({
             "uid":encrypt(status.landlord_uid)
-        })
+            })
+        else:
+            landlord_id = db["landlord"].find_one({
+            "phone":landlord_no
+            })
+        print(landlord_id)
         if request_id is None:
             description = "Fraudulent Case - Landlord (id: "+str(ObjectId(landlord_id["_id"]))+") make falls attempt to change status of Request (id: "+ status.id+ ")"
             pushAudit("Danger", description)
@@ -193,8 +219,8 @@ async def status_update(status: Status):
         tenant = db['tenant'].find_one({"uid": tenant_uid})
 
         if status.approval_status:
-            landlord_uid = request_id["landlord_uid"]
-            landlord = db["landlord"].find_one({"uid": landlord_uid})
+            landlord = db["landlord"].find_one({"_id": landlord_id["_id"]})
+            print(landlord)
             if landlord is None:
                 return {"status": "400", "data": "No landlord found"}
 
@@ -253,9 +279,17 @@ async def status_update(status: Status):
 @request_api_router.get("/landlord/{landlord_uid}")
 async def get_landlord_requests(landlord_uid):
     try:
+        requests = []
         uid = encrypt(landlord_uid)
-        requests = requests_serializer(
+        landlord = db["landlord"].find_one({"uid": uid})
+        requests1 = requests_serializer(
             db["requests"].find({"landlord_uid": uid}))
+        requests2 = requests_serializer(
+            db["requests"].find({"landlord_no": landlord["phone"]}))
+        for i in requests1:
+            requests.append(i)
+        for i in requests2:
+            requests.append(i)
         landlord_id = db["landlord"].find_one({"uid": uid})
         description = "Landlord (id: "+str(ObjectId(landlord_id["_id"]))+") called GET LANDLORD REQUESTS"
         pushAudit("Successful", description)
@@ -298,8 +332,13 @@ async def request_edit(Requestedit: Requestedit):
                     "relation": Requestedit.relation
                 }
             })
-            landlord_uid = request['landlord_uid']
-            landlord_id = db["landlord"].find_one({"uid": landlord_uid})
+            landlord_id= ""
+            if request["landlord_no"] == 0:
+                landlord_uid = request['landlord_uid']
+                landlord_id = db["landlord"].find_one({"uid": landlord_uid})
+            else:
+                landlord_no = request["landlord_no"]
+                landlord_id = db["landlord"].find_one({"phone": landlord_no})
             description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") edited address from Landlord (id: "+ str(ObjectId(landlord_id["_id"]))+") Request (id: "+ str(ObjectId(request["_id"]))+ ")"
             pushAudit("Successful", description)
             if landlord_id:

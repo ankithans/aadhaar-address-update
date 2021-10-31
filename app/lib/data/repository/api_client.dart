@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_model.dart';
 import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_poa.dart';
 import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_poi.dart';
 import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_xml_to_json.dart';
 import 'package:aadhaar_address_update/data/models/aadhaar/otp_model.dart';
+import 'package:aadhaar_address_update/data/models/tenant/tenant_accept_address_input.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_input.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_login.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
@@ -118,6 +120,16 @@ class APIClient {
     }
   }
 
+  Future<TenantNotifications> landlordNotifications(String uid) async {
+    try {
+      var response = await Dio().get(restURI + 'requests/landlord/' + uid);
+      return TenantNotifications.fromJson(response.data);
+    } on DioError catch (e) {
+      var error = json.decode(e.response.toString());
+      throw error;
+    }
+  }
+
   tenantRequestUpdate(TenantRequestUpdateInput tenantRequestUpdateInput) async {
     try {
       var response = await Dio()
@@ -129,12 +141,49 @@ class APIClient {
     }
   }
 
+  Future<bool> updateStatus(
+      {required String id, required String uid, required bool status}) async {
+    try {
+      var response = await Dio().post(updateURI, data: {
+        "id": id,
+        "landlord_uid": uid,
+        "approval_status": status,
+        "updated": "${DateTime.now().toIso8601String()}Z"
+      });
+      if (response.statusCode == 200) {
+        log(response.data.toString(), name: "Update Status");
+        return true;
+      } else {
+        log(response.data.toString(), name: "Update Status");
+        log(response.statusCode.toString(), name: "Update Status");
+        log(response.statusMessage.toString(), name: "Update Status");
+        return true;
+      }
+    } catch (e) {
+      log(e.toString(), name: "Update Status");
+      return false;
+    }
+  }
+
   tenantRequestDelete(String requestId, String uid) async {
     try {
       var response = await Dio().delete(restURI + 'requests/', data: {
         "request_id": requestId,
         "tenant_uid": uid,
       });
+      print(response.data);
+    } on DioError catch (e) {
+      var error = json.decode(e.response.toString());
+      throw error;
+    }
+  }
+
+  tenantAcceptAddress(TenantAcceptAddressInput tenantAcceptAddressInput) async {
+    try {
+      var response = await Dio().post(
+        restURI + 'tenants/accept_address',
+        data: tenantAcceptAddressInput,
+      );
       print(response.data);
     } on DioError catch (e) {
       var error = json.decode(e.response.toString());

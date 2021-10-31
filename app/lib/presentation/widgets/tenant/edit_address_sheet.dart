@@ -14,6 +14,7 @@ class EditAddressSheet extends StatefulWidget {
   TextEditingController districtAddressTextController;
   TextEditingController stateAddressTextController;
   TextEditingController pincodeAddressTextController;
+  TextEditingController countryAddressTextController;
   TenantNotifications requestNotifications;
   int index;
 
@@ -25,6 +26,7 @@ class EditAddressSheet extends StatefulWidget {
     required this.districtAddressTextController,
     required this.stateAddressTextController,
     required this.pincodeAddressTextController,
+    required this.countryAddressTextController,
     required this.requestNotifications,
     required this.index,
   }) : super(key: key);
@@ -59,15 +61,18 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                         hintText: 'H.No or Flat',
                         textEditingController:
                             widget.houseAddressTextController,
-                        disable: false,
+                        disable: widget.requestNotifications.data[widget.index]
+                                .status ==
+                            3,
                       ),
                       CustomTextFormField(
-                        title: 'Landmark',
-                        hintText: 'Landmark',
-                        textEditingController:
-                            widget.landmarkAddressTextController,
-                        disable: false,
-                      ),
+                          title: 'Landmark',
+                          hintText: 'Landmark',
+                          textEditingController:
+                              widget.landmarkAddressTextController,
+                          disable: widget.requestNotifications
+                                  .data[widget.index].status ==
+                              3),
                       CustomTextFormField(
                         title: 'District',
                         hintText: 'district',
@@ -80,6 +85,13 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                         hintText: 'state',
                         textEditingController:
                             widget.stateAddressTextController,
+                        disable: true,
+                      ),
+                      CustomTextFormField(
+                        title: 'Country',
+                        hintText: 'country',
+                        textEditingController:
+                            widget.countryAddressTextController,
                         disable: true,
                       ),
                       CustomTextFormField(
@@ -101,8 +113,22 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w500,
                     )),
-                onPressed: () {},
-                disable: widget.buttonDisable,
+                onPressed: () {
+                  BlocProvider.of<TenantNotifcationsCubit>(context)
+                      .tenantAcceptAddress(
+                    widget.countryAddressTextController.text,
+                    widget.districtAddressTextController.text,
+                    widget.houseAddressTextController.text,
+                    widget.landmarkAddressTextController.text,
+                    widget.landmarkAddressTextController.text,
+                    widget.pincodeAddressTextController.text,
+                    widget.stateAddressTextController.text,
+                    'vtc',
+                    'street',
+                  );
+                },
+                disable:
+                    widget.requestNotifications.data[widget.index].status == 3,
               ),
               SizedBox(
                 height: displayHeight(context) * 0.01,
@@ -119,7 +145,8 @@ class _EditAddressSheetState extends State<EditAddressSheet> {
                     widget.requestNotifications.data[widget.index].id,
                   );
                 },
-                disable: widget.buttonDisable,
+                disable:
+                    widget.requestNotifications.data[widget.index].status == 3,
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from pymongo import response
 
 from server.models.address_model import Address
 
@@ -99,8 +100,11 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
                 tenant_id["_id"]))+" ) made falls attempt to edit Request (" + str(ObjectId(request_id["_id"]))+")"
             pushAudit("Danger", description)
             return {"status": "400", "data": "No Address Update Permited"}
-        if await addressvalidation(UpdateAddress.landlordaddress,UpdateAddress.updatedaddress):
-            updateStatus = db["requests"].update_one({"_id": request_id["_id"]}, {
+        res = await addressvalidation(UpdateAddress.landlordaddress,UpdateAddress.updatedaddress)
+        print(res)
+        if res:
+            print("updated")
+            db["requests"].update_one({"_id": request_id["_id"]}, {
                 "$set": {
                     "status": 3,
                     "landlord_address": dict(UpdateAddress.address),
@@ -128,6 +132,7 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
         #     pushAudit("succesful",description)
         #     return {"status": "200", "data": UpdateAddress.address}
         else:
+            print("failed")
             description = "Tenant (id: "+str(ObjectId(
                 tenant_id["_id"]))+" ) update address Request (id: "+str(ObjectId(request_id["_id"]))+" ) denied due to to many changes in the address"
             pushAudit("Error",description)

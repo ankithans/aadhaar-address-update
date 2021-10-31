@@ -111,7 +111,9 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
                     "updated": ""
                 }
             })
-            db["tenant"].update_one[{"_id": tenant_id["_id"]}]
+            db["tenant"].update_one({"_id": tenant_id["_id"]},{
+                "address": dict(UpdateAddress.address)
+            })
             description = "Tenant (id: "+str(ObjectId(
                 tenant_id["_id"]))+" ) updated address Request (id: "+str(ObjectId(request_id["_id"]))+" )"
             pushAudit("succesful",description)

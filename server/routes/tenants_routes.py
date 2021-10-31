@@ -1,9 +1,12 @@
 from fastapi import APIRouter, HTTPException
+from pymongo import response
 
 from server.models.address_model import Address
 
 from ..models.tenants_model import Tenant, UpdateAddress
 from ..config.database import db, encrypt
+
+from .requests_routes import addressvalidation
 
 from ..auditLog.auditlog import pushAudit
 
@@ -90,32 +93,50 @@ async def create_tenant(tenant: Tenant):
 async def update_tenant_address(UpdateAddress: UpdateAddress):
     try:
         uid = encrypt(UpdateAddress.uid)
-        tenant_id = db["tenant"].find_one({uid: uid})
+        tenant_id = db["tenant"].find_one({"uid": uid})
         request_id = db["requests"].find_one({"tenant_uid": uid, "status": 1})
         if request_id is None:
             description = "Fraudulent Case - Tenant (id: " + str(ObjectId(
                 tenant_id["_id"]))+" ) made falls attempt to edit Request (" + str(ObjectId(request_id["_id"]))+")"
             pushAudit("Danger", description)
             return {"status": "400", "data": "No Address Update Permited"}
-        if UpdateAddress.address.house and request_id["landlord_address"]["country"] == UpdateAddress.address.country and request_id["landlord_address"]["dist"] == UpdateAddress.address.dist and request_id["landlord_address"]["loc"] == UpdateAddress.address.loc and request_id["landlord_address"]["pc"] == UpdateAddress.address.pc and request_id["landlord_address"]["state"] == UpdateAddress.address.state and request_id["landlord_address"]["vtc"] == UpdateAddress.address.vtc and request_id["landlord_address"]["street"] == UpdateAddress.address.street:
-            db["tenant"].update_one({"uid": uid}, {"$set": {
-                "address": dict(UpdateAddress.address),
-            }})
-            updateStatus = db["requests"].update_one({"_id": request_id["_id"]}, {
+        res = await addressvalidation(UpdateAddress.landlordaddress, UpdateAddress.updatedaddress)
+        print(res)
+        if res:
+            print("updated")
+            db["requests"].update_one({"_id": request_id["_id"]}, {
                 "$set": {
                     "status": 3,
                     "landlord_address": dict(UpdateAddress.address),
                     "updated": ""
                 }
             })
+            db["tenant"].update_one({"_id": tenant_id["_id"]}, {"$set": {"address": dict(UpdateAddress.address)}
+                                                                })
             description = "Tenant (id: "+str(ObjectId(
                 tenant_id["_id"]))+" ) updated address Request (id: "+str(ObjectId(request_id["_id"]))+" )"
-            pushAudit("succesful",description)
+            pushAudit("succesful", description)
             return {"status": "200", "data": UpdateAddress.address}
+        # if UpdateAddress.address.house and request_id["landlord_address"]["country"] == UpdateAddress.address.country and request_id["landlord_address"]["dist"] == UpdateAddress.address.dist and request_id["landlord_address"]["loc"] == UpdateAddress.address.loc and request_id["landlord_address"]["pc"] == UpdateAddress.address.pc and request_id["landlord_address"]["state"] == UpdateAddress.address.state and request_id["landlord_address"]["vtc"] == UpdateAddress.address.vtc and request_id["landlord_address"]["street"] == UpdateAddress.address.street:
+        #     db["tenant"].update_one({"uid": uid}, {"$set": {
+        #         "address": dict(UpdateAddress.address),
+        #     }})
+        #     updateStatus = db["requests"].update_one({"_id": request_id["_id"]}, {
+        #         "$set": {
+        #             "status": 3,
+        #             "landlord_address": dict(UpdateAddress.address),
+        #             "updated": ""
+        #         }
+        #     })
+        #     description = "Tenant (id: "+str(ObjectId(
+        #         tenant_id["_id"]))+" ) updated address Request (id: "+str(ObjectId(request_id["_id"]))+" )"
+        #     pushAudit("succesful",description)
+        #     return {"status": "200", "data": UpdateAddress.address}
         else:
+            print("failed")
             description = "Tenant (id: "+str(ObjectId(
                 tenant_id["_id"]))+" ) update address Request (id: "+str(ObjectId(request_id["_id"]))+" ) denied due to to many changes in the address"
-            pushAudit("Error",description)
+            pushAudit("Error", description)
             return {"status": "501", "data": "Unprocessible Entity"}
     except Exception as e:
         print(e)

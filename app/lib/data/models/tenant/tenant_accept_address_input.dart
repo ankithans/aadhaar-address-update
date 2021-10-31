@@ -2,19 +2,27 @@ class TenantAcceptAddressInput {
   TenantAcceptAddressInput({
     required this.address,
     required this.uid,
+    required this.landlordaddress,
+    required this.updatedaddress,
   });
   late final Address address;
   late final String uid;
+  late final String landlordaddress;
+  late final String updatedaddress;
 
   TenantAcceptAddressInput.fromJson(Map<String, dynamic> json) {
     address = Address.fromJson(json['address']);
     uid = json['uid'];
+    landlordaddress = json['landlordaddress'];
+    updatedaddress = json['updatedaddress'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['address'] = address.toJson();
     _data['uid'] = uid;
+    _data['landlordaddress'] = landlordaddress;
+    _data['updatedaddress'] = updatedaddress;
     return _data;
   }
 }

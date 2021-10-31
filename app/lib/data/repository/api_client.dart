@@ -144,7 +144,8 @@ class APIClient {
   Future<bool> updateStatus(
       {required String id, required String uid, required bool status}) async {
     try {
-      var response = await Dio().post(updateURI, data: {
+      var response =
+          await Dio().post(restURI + "requests/status_update", data: {
         "id": id,
         "landlord_uid": uid,
         "approval_status": status,

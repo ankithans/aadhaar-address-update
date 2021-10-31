@@ -416,15 +416,14 @@ async def delete_request(Requestdelete: Requestdelete):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@request_api_router.post("/addressvalidation")
 async def addressvalidation(landlordaddress: str = Body(...), updatedaddress : str = Body(...)):
     try:
         my_dist = gmaps.distance_matrix(landlordaddress,updatedaddress)['rows'][0]['elements'][0]
         print(my_dist)
         if (my_dist["distance"]["value"] > 100):
-            return {"status":"Err", "data": "Your updated address is too far way from landlord's address"}
+            return False
         else:
-            return {"status":"ok", "data": "Address Updated Successfully"}
+            return True
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail=str(e))

@@ -16,8 +16,15 @@ import firebase_admin
 from firebase_admin import credentials, messaging
 import os
 import sys
+import googlemaps
+from dotenv import load_dotenv
+from fastapi import Body
 
 request_api_router = APIRouter()
+
+load_dotenv()
+key=os.getenv("key")
+gmaps = googlemaps.Client(key)
 
 
 dir = os.path.dirname(__file__)
@@ -379,3 +386,18 @@ async def delete_request(Requestdelete: Requestdelete):
         description = str(e)
         pushAudit("Error", description)
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@request_api_router.post("/addressvalidation")
+async def addressvalidation(landlordaddress: str = Body(...), updatedaddress : str = Body(...)):
+    try:
+        my_dist = gmaps.distance_matrix(landlordaddress,updatedaddress)['rows'][0]['elements'][0]
+        print(my_dist)
+        if (my_dist["distance"]["value"] > 100):
+            return {"status":"Err", "data": "Your updated address is too far way from landlord's address"}
+        else:
+            return {"status":"ok", "data": "Address Updated Successfully"}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))
+

@@ -6,7 +6,7 @@ import os
 load_dotenv()
 MONGO_CLIENT_URL=os.getenv("MONGO_CLIENT_URL")
 
-client = MongoClient(MONGO_CLIENT_URL, tls=True, tlsAllowInvalidCertificates=True)
+client = MongoClient(MONGO_CLIENT_URL)
 
 def encrypt(text):
     encode= text.encode('ascii')

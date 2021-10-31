@@ -13,3 +13,5 @@ class Tenant(BaseModel):
 class UpdateAddress(BaseModel):
     address: Address
     uid: str
+    landlordaddress: str
+    updatedaddress: str

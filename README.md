@@ -3,9 +3,9 @@
 ## Steps to Access
 To access our application you can either download the [android application]() or [click here](https://uidai-address-update.netlify.app/) to view on web.
 
-- **Backend API Swagger Documentation** - https://uidai-aadhaar.herokuapp.com/docs
-- **Android App** - 
-- **Web App** - https://uidai-address-update.netlify.app/
+- [Backend API Swagger Documentation](https://uidai-aadhaar.herokuapp.com/docs)
+- [Android App](https://github.com/ankithans/aadhaar-address-update/releases/download/v1.0.0/app-release.apk)
+- [Web App](https://uidai-address-update.netlify.app/)
 
 > Note : If you are on web version, Aadhaar API's(OTP and EKYC) blocks the requests due to CORS issue. Please use browser with disabled CORS and security.
 

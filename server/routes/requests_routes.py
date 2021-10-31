@@ -201,8 +201,9 @@ async def create_request(request: Request):
             description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") called CREATE REQUEST api without Landlord Details"
             pushAudit("Danger", description)
             return {"status":"Unprocessable Entity", "data":"No Landlord Details"}
-
+        print(request.landlord_address)
         request.landlord_address = dict(request.landlord_address)
+        print(request.landlord_address)
         request.tenant_uid = encrypt(request.tenant_uid)
         request.landlord_uid = uid
         db["requests"].insert_one(dict(request))

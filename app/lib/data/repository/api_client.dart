@@ -23,6 +23,7 @@ class APIClient {
     try {
       var response = await Dio().post(
         otpURI,
+        options: Options(headers: {}),
         data: {"uid": uid, "txnId": txn},
       );
       print(response.data);
@@ -61,12 +62,15 @@ class APIClient {
         EkycPoa ekycPoa = EkycPoa.fromJson(abc['KycRes']['UidData']['Poa']);
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("poi", jsonEncode(ekycPoi.toJson()).toString());
+        prefs.setString("poa", jsonEncode(ekycPoa.toJson()).toString());
         prefs.setString('phone', ekycPoi.phone.toString());
 
         return ekycPoa;
       }
       throw "OTP Entered was Incorrect!";
     } on DioError catch (e) {
+      log(e.toString(), name: "E-KYC Error");
       var error = json.decode(e.response.toString());
       throw error;
     }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:aadhaar_address_update/data/models/aadhaar/ekyc_poa.dart';
 import 'package:aadhaar_address_update/data/models/tenant/tenant_notifcations.dart';
 import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/edit_address_sheet.dart';
@@ -6,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'edit_request_sheet.dart';
 
@@ -39,6 +43,11 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
   bool isLoadingSheet = false;
   TenantNotifications requestNotifications =
       TenantNotifications(status: "", data: []);
+
+  initializeSharedPref(EkycPoa ekycPoa) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("poa", jsonEncode(ekycPoa.toJson()).toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +162,18 @@ class _TenantNotificationsWidgetState extends State<TenantNotificationsWidget> {
                     BlocProvider.of<TenantNotifcationsCubit>(context)
                         .getTenantNotifications();
                   });
+                  EkycPoa ekycPoa = EkycPoa(
+                      co: "",
+                      country: countryAddressTextController.text,
+                      dist: districtAddressTextController.text,
+                      house: houseAddressTextController.text,
+                      lm: landmarkAddressTextController.text,
+                      loc: "",
+                      pc: pincodeAddressTextController.text,
+                      state: stateAddressTextController.text,
+                      vtc: "",
+                      street: "");
+                  initializeSharedPref(ekycPoa);
                 }
                 if (state is TenantNotificationSubmitFailure) {
                   isLoadingSheet = false;

@@ -204,8 +204,10 @@ async def create_request(request: Request):
         print(request.landlord_address)
         request.landlord_address = dict(request.landlord_address)
         print(request.landlord_address)
-        request.tenant_uid = encrypt(request.tenant_uid)
+        request.tenant_uid = tenant_uid
+        print(request.tenant_uid)
         request.landlord_uid = uid
+        print(request.landlord_uid)
         print("pre")
         db["requests"].insert_one(dict(request))
         print("post")

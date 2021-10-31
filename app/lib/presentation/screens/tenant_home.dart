@@ -1,5 +1,5 @@
 import 'package:aadhaar_address_update/presentation/screens/login.dart';
-import 'package:aadhaar_address_update/presentation/widgets/login/profile.dart';
+import 'package:aadhaar_address_update/presentation/screens/profile.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/notifications.dart';
 import 'package:aadhaar_address_update/presentation/widgets/tenant/request.dart';
 import 'package:flutter/material.dart';

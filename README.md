@@ -77,6 +77,18 @@ Landlord can Approve/Decline the request.
 ## Tech Stack
 FastAPI, Flutter, MongoDB, Twilio, Firebase Messaging, Google Fonts, Bloc Architecture, Google Maps API's, OpenCage API's, Base64 Encryption
 
+## Steps to run loclly
+Clone the repo in your local machine and setup python and flutter environment
+
+### Mobile Application
+1. Go into `app/` directory by doing `cd app` in terminal.
+2. Configure firebase for android by folllowing the [doumentation](https://firebase.flutter.dev/docs/installation/android/).
+3. Write `flutter run` in the terminal to start the application.
+
+### FastAPI Server
+1. Install all the required packages in python virtual enviroment `pip install requirements.txt`
+2. Run `python main.py` in the root directory of the project.
+
 ## Contributors
 - [Kartik Bansal](https://github.com/kbansal77)
 - [Adit Patel](https://github.com/aditpatel01)

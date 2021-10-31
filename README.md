@@ -3,7 +3,7 @@
 ## Steps to Access
 To access our application you can either download the [android application]() or [click here](https://uidai-address-update.netlify.app/) to view on web.
 
-- [Backend API Swagger Documentation**](https://uidai-aadhaar.herokuapp.com/docs)
+- [Backend API Swagger Documentation](https://uidai-aadhaar.herokuapp.com/docs)
 - [Android App](https://github.com/ankithans/aadhaar-address-update/releases/download/v1.0.0/app-release.apk)
 - [Web App](https://uidai-address-update.netlify.app/)
 

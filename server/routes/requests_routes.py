@@ -144,16 +144,12 @@ async def create_request(request: Request):
                         tenant_id["_id"]))+" ) made falls attempt to Create Request, Tenant and landlord are same. "
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
-                sendPush(
-                    "Tenant is requesting for address update.",
-                    "Do you agree and would like to give authoriy to update address?",
-                    [land['fcm']],
-                )
-                # final_num="+91-"+str(land["phone"])
-                # print(final_num)
-                # client.messages.create(from_=twilio_phone_num,
-                #                        to=final_num,
-                #                        body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')
+                if land["fcm"] is not "" or land["fcm"] is not None:
+                    sendPush(
+                        "Tenant is requesting for address update.",
+                        "Do you agree and would like to give authoriy to update address?",
+                        [land['fcm']],
+                    )
             else:
                 landlord = {
                 "address": "",
@@ -175,11 +171,12 @@ async def create_request(request: Request):
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
                 else :
-                    sendPush(
-                    "Tenant is requesting for address update.",
-                    "Do you agree and would like to give authoriy to update address?",
-                    [land['fcm']],
-                    )
+                    if land["fcm"] is not "" or land["fcm"] is not None:
+                        sendPush(
+                        "Tenant is requesting for address update.",
+                        "Do you agree and would like to give authoriy to update address?",
+                        [land['fcm']],
+                        )
                     # final_num="+91-"+str(land["phone"])
                     # client.messages.create(from_=twilio_phone_num,
                     #                    to=final_num,
@@ -201,18 +198,11 @@ async def create_request(request: Request):
             description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") called CREATE REQUEST api without Landlord Details"
             pushAudit("Danger", description)
             return {"status":"Unprocessable Entity", "data":"No Landlord Details"}
-        print(request.landlord_address)
         request.landlord_address = dict(request.landlord_address)
-        print(request.landlord_address)
         request.tenant_uid = tenant_uid
-        print(request.tenant_uid)
         request.landlord_uid = uid
-        print(request.landlord_uid)
-        print("pre")
         db["requests"].insert_one(dict(request))
-        print("post")
         request_id = db["requests"].find_one({"tenant_uid": request.tenant_uid, "status": 0})
-        print(request_id)
         description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") made request (id: "+str(ObjectId(request_id["_id"]))+" ) to Landlord (id: "+str(ObjectId(land["_id"]))+" )"
         pushAudit("Succesful", description)
         return {"status": "ok", "data": request}

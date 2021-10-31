@@ -150,6 +150,7 @@ async def create_request(request: Request):
                     [land['fcm']],
                 )
                 final_num="+91-"+str(land["phone"])
+                print(final_num)
                 client.messages.create(from_=twilio_phone_num,
                                        to=final_num,
                                        body='Tenant is requesting for address update. Do you agree and would like to give authoriy to update address?')

@@ -177,7 +177,7 @@ async def create_request(request: Request):
                 else :
                     print(land["fcm"])
                     print("2")
-                    if land["fcm"] != "" or land["fcm"]  != None:
+                    if land["fcm"] != "":
                         sendPush(
                         "Tenant is requesting for address update.",
                         "Do you agree and would like to give authoriy to update address?",

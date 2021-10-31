@@ -214,8 +214,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Text(
                                   snapshot.data!.ekycPoa.house +
                                       " " +
-                                      snapshot.data!.ekycPoa.lm +
-                                      " " +
+                                      //   snapshot.data!.ekycPoa.lm +
+                                      //   " " +
                                       snapshot.data!.ekycPoa.dist +
                                       " " +
                                       snapshot.data!.ekycPoa.state +

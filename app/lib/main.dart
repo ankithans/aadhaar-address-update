@@ -82,6 +82,7 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging.instance.getToken().then((token) {
       sharedPrefs('fcm', token.toString());
+      print(token);
     });
 
     FirebaseMessaging.instance

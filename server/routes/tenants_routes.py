@@ -99,7 +99,7 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
                 tenant_id["_id"]))+" ) made falls attempt to edit Request (" + str(ObjectId(request_id["_id"]))+")"
             pushAudit("Danger", description)
             return {"status": "400", "data": "No Address Update Permited"}
-        if addressvalidation(UpdateAddress.landlordaddress,UpdateAddress.updatedaddress):
+        if await addressvalidation(UpdateAddress.landlordaddress,UpdateAddress.updatedaddress):
             updateStatus = db["requests"].update_one({"_id": request_id["_id"]}, {
                 "$set": {
                     "status": 3,

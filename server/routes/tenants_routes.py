@@ -92,7 +92,7 @@ async def create_tenant(tenant: Tenant):
 async def update_tenant_address(UpdateAddress: UpdateAddress):
     try:
         uid = encrypt(UpdateAddress.uid)
-        tenant_id = db["tenant"].find_one({uid: uid})
+        tenant_id = db["tenant"].find_one({"uid": uid})
         request_id = db["requests"].find_one({"tenant_uid": uid, "status": 1})
         if request_id is None:
             description = "Fraudulent Case - Tenant (id: " + str(ObjectId(

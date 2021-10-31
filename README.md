@@ -15,9 +15,14 @@
         <td><img src="./mockups/07.png"></td>
         <td><img src="./mockups/11.png"></td>
     </tr>
+</table>
+<table>
     <tr>
         <td><img src="./mockups/08.png"></td>
         <td><img src="./mockups/09.png"></td>
+    </tr>
+    <tr>
         <td><img src="./mockups/10.png"></td>
+        <td><img src="./mockups/13.png"></td>
     </tr>
 </table>

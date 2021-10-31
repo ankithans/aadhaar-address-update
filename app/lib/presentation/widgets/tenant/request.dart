@@ -154,7 +154,7 @@ class _TenantRequestState extends State<TenantRequest> {
                       children: [
                         CustomTextFormField(
                           disable: verifyDisable,
-                          title: 'UID/Phone Number of Landlord',
+                          title: 'Phone/Aadhaar Number of Landlord',
                           hintText: 'xxxx-xxxx-xxxx',
                           textEditingController: uidTextController,
                         ),
@@ -188,11 +188,20 @@ class _TenantRequestState extends State<TenantRequest> {
                                 ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              String landlordNo =
+                                  uidTextController.text.length == 10
+                                      ? uidTextController.text
+                                      : "0";
+                              String uidLandlord =
+                                  uidTextController.text.length == 12
+                                      ? uidTextController.text
+                                      : "";
                               BlocProvider.of<TenantRequestCubit>(context)
                                   .submitRequestForm(
-                                uidTextController.text,
+                                uidLandlord,
                                 relationTextController.text,
                                 reasonTextController.text,
+                                landlordNo,
                               );
                             }
                           },

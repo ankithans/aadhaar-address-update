@@ -11,7 +11,7 @@ class EkycPoa {
     required this.vtc,
     required this.street,
   });
-  late final String co;
+  late final String? co;
   late final String country;
   late final String dist;
   late final String house;

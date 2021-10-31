@@ -65,7 +65,7 @@ class APIClient {
 
         return ekycPoa;
       }
-      throw "OTP Entered was Incorreect!";
+      throw "OTP Entered was Incorrect!";
     } on DioError catch (e) {
       var error = json.decode(e.response.toString());
       throw error;

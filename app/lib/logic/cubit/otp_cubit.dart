@@ -42,7 +42,7 @@ class OtpCubit extends Cubit<OtpState> {
       //   Tenant login in database
 
       Address address = Address(
-        co: ekycPoa.co,
+        co: 'ekycPoa.co',
         country: ekycPoa.country,
         dist: ekycPoa.dist,
         house: ekycPoa.house,

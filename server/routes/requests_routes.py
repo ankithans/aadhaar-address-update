@@ -193,9 +193,9 @@ async def create_request(request: Request):
                 "uid": str(uid)
                 }
                 db["landlord"].insert_one(landlord)
-                landlord_id = db["landlord"].find_one({"phone": int(phone)})
-                print(landlord_id)
-                description = "Landlord (id: "+str(ObjectId(landlord_id["_id"]))+") Created"
+                land = db["landlord"].find_one({"phone": int(phone)})
+                print(land)
+                description = "Landlord (id: "+str(ObjectId(land["_id"]))+") Created"
                 pushAudit("succesful", description)
         else:
             description = "Tenant (id: "+str(ObjectId(tenant_id["_id"]))+") called CREATE REQUEST api without Landlord Details"

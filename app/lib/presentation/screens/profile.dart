@@ -1,8 +1,11 @@
 import 'package:aadhaar_address_update/data/repository/profile_service.dart';
+import 'package:aadhaar_address_update/presentation/screens/login.dart';
+import 'package:aadhaar_address_update/presentation/widgets/common/elevated_button.dart';
 import 'package:aadhaar_address_update/utils/size_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -75,93 +78,192 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         SizedBox(
-                          height: displayHeight(context) * 0.07,
+                          height: displayHeight(context) * 0.05,
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
                           child: ListTile(
+                            tileColor: Colors.grey[200],
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
                             title: Text(
                               "Name",
-                              style: GoogleFonts.montserrat(),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
                             ),
                             trailing: Text(
                               snapshot.data!.ekycPoi.name,
-                              style: GoogleFonts.montserrat()
-                                  .copyWith(fontSize: 18.0),
+                              style: GoogleFonts.montserrat().copyWith(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
                           child: ListTile(
+                            tileColor: Colors.grey[200],
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                            ),
                             title: Text(
                               "Phone",
-                              style: GoogleFonts.montserrat(),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
                             ),
                             trailing: Text(
                               snapshot.data!.ekycPoi.phone,
-                              style: GoogleFonts.montserrat()
-                                  .copyWith(fontSize: 18.0),
+                              style: GoogleFonts.montserrat().copyWith(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
                           child: ListTile(
+                            tileColor: Colors.grey[200],
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
                             title: Text(
                               "Date of Birth",
-                              style: GoogleFonts.montserrat(),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
                             ),
                             trailing: Text(
                               snapshot.data!.ekycPoi.dob,
-                              style: GoogleFonts.montserrat()
-                                  .copyWith(fontSize: 18.0),
+                              style: GoogleFonts.montserrat().copyWith(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                              const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
                           child: ListTile(
+                            tileColor: Colors.grey[200],
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
                             title: Text(
                               "Gender",
-                              style: GoogleFonts.montserrat(),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
                             ),
                             trailing: Text(
                               snapshot.data!.ekycPoi.gender,
-                              style: GoogleFonts.montserrat()
-                                  .copyWith(fontSize: 18.0),
+                              style: GoogleFonts.montserrat().copyWith(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Address",
-                                style: GoogleFonts.montserrat()
-                                    .copyWith(fontSize: 18),
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
+                            right: 15,
+                            top: 5,
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
                               ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                snapshot.data!.ekycPoa
-                                    .toJson()
-                                    .keys
-                                    .map((e) =>
-                                        snapshot.data!.ekycPoa.toJson()[e])
-                                    .join(", "),
-                                style: GoogleFonts.montserrat().copyWith(
-                                  fontSize: 18.0,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Address",
+                                  style: GoogleFonts.montserrat().copyWith(
+                                    fontSize: 13,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  snapshot.data!.ekycPoa.house +
+                                      " " +
+                                      snapshot.data!.ekycPoa.lm +
+                                      " " +
+                                      snapshot.data!.ekycPoa.dist +
+                                      " " +
+                                      snapshot.data!.ekycPoa.state +
+                                      " " +
+                                      snapshot.data!.ekycPoa.country +
+                                      " " +
+                                      snapshot.data!.ekycPoa.pc,
+                                  //   snapshot.data!.ekycPoa
+                                  //       .toJson()
+                                  //       .keys
+                                  //       .map((e) =>
+                                  //           snapshot.data!.ekycPoa.toJson()[e])
+                                  //       .join(", "),
+                                  style: GoogleFonts.montserrat().copyWith(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: CustomElevatedButton(
+                            color: Colors.red,
+                            title: Text(
+                              "Logout",
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
+                            ),
+                            onPressed: () async {
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              await preferences.clear();
+
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                              );
+                            },
+                            disable: false,
                           ),
                         ),
                       ],

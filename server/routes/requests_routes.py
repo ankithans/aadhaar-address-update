@@ -138,6 +138,7 @@ async def create_request(request: Request):
         if request.landlord_uid:
             uid = encrypt(request.landlord_uid)
             land = db["landlord"].find_one({"uid": uid})
+            print(land)
             if land:
                 if request.landlord_uid == request.tenant_uid:
                     description = "Fraudulent Case - Tenant (id: " + str(ObjectId(
@@ -145,13 +146,15 @@ async def create_request(request: Request):
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
                 print(land["fcm"])
-                if land["fcm"] != "" or land["fcm"] != None:
+                print("1")
+                if land["fcm"] != "":
                     sendPush(
                         "Tenant is requesting for address update.",
                         "Do you agree and would like to give authoriy to update address?",
                         [land['fcm']],
                     )
             else:
+                print("created new")
                 landlord = {
                 "address": "",
                 "phone": int(phone),
@@ -172,7 +175,9 @@ async def create_request(request: Request):
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
                 else :
-                    if land["fcm"] is not "" or land["fcm"] is not None:
+                    print(land["fcm"])
+                    print("2")
+                    if land["fcm"] != "" or land["fcm"]  != None:
                         sendPush(
                         "Tenant is requesting for address update.",
                         "Do you agree and would like to give authoriy to update address?",

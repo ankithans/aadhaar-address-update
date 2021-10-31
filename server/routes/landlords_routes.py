@@ -54,8 +54,8 @@ async def create_landlord(landlord: Landlord):
     try:
         landlordDetails = {}
         uid = encrypt(landlord.uid)
-        if(collection_name.find_one({"uid": uid})):
-            collection_name.update_one({"uid": uid}, {
+        if(collection_name.find_one({"phone": landlord.phone})):
+            collection_name.update_one({"phone": landlord.phone}, {
                 "$set": {"address": dict(landlord.address), "fcm": landlord.fcm, "uid": uid, "phone": landlord.phone}})
             landlords = collection_name.find_one(
                 {"uid": uid})

@@ -14,7 +14,8 @@ class TenantRequestCubit extends Cubit<TenantRequestState> {
     this.apiClient,
   ) : super(TenantRequestInitial());
 
-  submitRequestForm(String uid, String relation, String reason) async {
+  submitRequestForm(
+      String uid, String relation, String reason, String landlordPhone) async {
     emit(TenantRequestLoading());
     try {
       String datetime = DateTime.now().toString();
@@ -24,7 +25,7 @@ class TenantRequestCubit extends Cubit<TenantRequestState> {
       TenantRequestInput tenantRequestInput = TenantRequestInput(
         tenantUid: tenantUID,
         landlordUid: uid,
-        landlordNo: 0,
+        landlordNo: int.parse(landlordPhone),
         status: 0,
         landlordAddress: LandlordAddress(
           co: "",

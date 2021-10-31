@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:aadhaar_address_update/data/repository/api_client.dart';
 import 'package:aadhaar_address_update/logic/cubit/otp_cubit.dart';
 import 'package:aadhaar_address_update/logic/cubit/tenant_notifcations_cubit.dart';
@@ -18,7 +20,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
+  log('Handling a background message ${message.messageId}');
 }
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
@@ -141,7 +143,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const LoginScreen(),
+        home: const LandlordHomeScreen(),
       ),
     );
   }

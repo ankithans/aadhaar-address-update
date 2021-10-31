@@ -120,11 +120,31 @@ class TenantNotifcationsCubit extends Cubit<TenantNotifcationsState> {
     String state,
     String vtc,
     String street,
+    String landlordAddress,
   ) async {
     try {
       emit(TenantNotificationSubmitLoading());
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String uid = prefs.getString('tenantUID').toString();
+
+      String updatedaddress = house +
+          " " +
+          street +
+          " " +
+          lm +
+          " " +
+          //   loc +
+          //   " " +
+          dist +
+          " " +
+          state +
+          " " +
+          country +
+          " " +
+          pc;
+
+      log(landlordAddress);
+      log(updatedaddress);
 
       TenantAcceptAddressInput tenantAcceptAddressInput =
           TenantAcceptAddressInput(
@@ -141,6 +161,8 @@ class TenantNotifcationsCubit extends Cubit<TenantNotifcationsState> {
           street: street,
         ),
         uid: uid,
+        landlordaddress: landlordAddress,
+        updatedaddress: updatedaddress,
       );
       await apiClient.tenantAcceptAddress(tenantAcceptAddressInput);
 

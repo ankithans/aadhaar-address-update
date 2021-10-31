@@ -12,19 +12,6 @@ import json
 landlord_api_router = APIRouter()
 
 
-# retrieve
-# @landlord_api_router.get("/")
-# async def get_landlords():
-#     try:
-#         landlords = landlords_serializer(collection_name.find())
-#         return {"status": "ok", "data": landlords}
-#     except Exception as e:
-#         print(e)
-#         raise HTTPException(status_code=400, detail=str(e))
-
-# get landlord details
-
-
 @landlord_api_router.get("/{Landlord_uid}")
 async def get_landlord(Landlord_uid):
     try:
@@ -32,7 +19,6 @@ async def get_landlord(Landlord_uid):
         landlordDetails = {}
         landlord = collection_name.find_one({"uid": uid})
         landlordDetails["id"] = str(ObjectId(landlord["_id"]))
-        print(str(ObjectId(landlord["_id"])))
         landlordDetails["address"] = landlord["address"]
         landlordDetails["fcm"] = landlord["fcm"]
         landlordDetails["uid"] = landlord["uid"]

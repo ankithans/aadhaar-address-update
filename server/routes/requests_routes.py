@@ -37,7 +37,6 @@ client = Client(account_sid, auth_token)
 
 dir = os.path.dirname(__file__)
 filename = os.path.join(dir, "serviceaccountkey.json")
-print(filename)
 cred = credentials.Certificate(filename)
 firebase_admin.initialize_app(cred)
 
@@ -54,71 +53,6 @@ def sendPush(title, msg, registration_token, dataObject=None):
     response = messaging.send_multicast(message)
 
     print("Successfully sent message:", response)
-
-
-# @request_api_router.get("/")
-# async def get_requests():
-#     try:
-#         request = requests_serializer(db["requests"].find())
-#         return {"status":"ok","data": request}
-#     except Exception as e:
-#         print(e)
-#         raise HTTPException(status_code=400, detail=str(e))
-
-
-# @request_api_router.post("/")
-# async def create_request(request: Request):
-#     try:
-#         uid = ""
-#         phone = ""
-#         tenant_uid = encrypt(request.tenant_uid)
-#         tenant_id =db["tenant"].find_one({uid: tenant_uid})
-#         if request.landlord_uid:
-#             if request.landlord_uid == request.tenant_uid:
-#                 description = "Fraudulent Case - Tenant (id: " + str(ObjectId(
-#                     tenant_id["_id"]))+" ) made falls attempt to Create Request, Tenant and landlord are same. "
-#                 pushAudit("Danger", description)
-#                 return {"status": "400", "data": "tenant and landlord cannot be same."}
-#             uid = encrypt(request.landlord_uid)
-#             land = db["landlord"].find_one({"uid": uid})
-#             if land:
-#                 print("landlord exists")
-#                 sendPush(
-#                     "Tenant is requesting for address update.",
-#                     "Do you agree and would like to give authoriy to update address?",
-#                     [land['fcm']],
-#                 )
-#         elif request.landlord_no:
-#             phone = request.landlord_no
-#             land = db["landlord"].find_one({"phone": phone})
-#             if decrypt(land["uid"]) == request.tenant_uid:
-#                 return {"status": "400", "data": "tenant and landlord cannot be same."}
-#             if land:
-#                 print("landlord exists")
-#                 sendPush(
-#                     "Tenant is requesting for address update.",
-#                     "Do you agree and would like to give authoriy to update address?",
-#                     [land['fcm']],
-#                 )
-#         else:
-#             landlord = {
-#                 "address": "",
-#                 "phone": phone,
-#                 "fcm": "",
-#                 "uid": uid
-#             }
-#             db["landlord"].insert_one(landlord)
-
-#         request.landlord_address = dict(request.landlord_address)
-#         request.tenant_uid = encrypt(request.tenant_uid)
-#         request.landlord_uid = uid
-#         db["requests"].insert_one(dict(request))
-
-#         return {"status": "ok", "data": request}
-
-#     except Exception as e:
-#         print(e)
-#         raise HTTPException(status_code=400, detail=str(e))
 
 
 @request_api_router.post("/")
@@ -138,15 +72,12 @@ async def create_request(request: Request):
         if request.landlord_uid:
             uid = encrypt(request.landlord_uid)
             land = db["landlord"].find_one({"uid": uid})
-            print(land)
             if land:
                 if request.landlord_uid == request.tenant_uid:
                     description = "Fraudulent Case - Tenant (id: " + str(ObjectId(
                         tenant_id["_id"]))+" ) made falls attempt to Create Request, Tenant and landlord are same. "
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
-                print(land["fcm"])
-                print("1")
                 if land["fcm"] != "":
                     sendPush(
                         "Tenant is requesting for address update.",
@@ -154,7 +85,6 @@ async def create_request(request: Request):
                         [land['fcm']],
                     )
             else:
-                print("created new")
                 landlord = {
                 "address": "",
                 "phone": int(phone),
@@ -175,8 +105,6 @@ async def create_request(request: Request):
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
                 else :
-                    print(land["fcm"])
-                    print("2")
                     if land["fcm"] != "":
                         sendPush(
                         "Tenant is requesting for address update.",
@@ -197,7 +125,6 @@ async def create_request(request: Request):
                 }
                 db["landlord"].insert_one(landlord)
                 land = db["landlord"].find_one({"phone": int(phone)})
-                print(land)
                 description = "Landlord (id: "+str(ObjectId(land["_id"]))+") Created"
                 pushAudit("succesful", description)
         else:
@@ -234,7 +161,6 @@ async def status_update(status: Status):
             landlord_id = db["landlord"].find_one({
             "phone":landlord_no
             })
-        print(landlord_id)
         if request_id is None:
             description = "Fraudulent Case - Landlord (id: "+str(ObjectId(landlord_id["_id"]))+") make falls attempt to change status of Request (id: "+ status.id+ ")"
             pushAudit("Danger", description)
@@ -246,7 +172,6 @@ async def status_update(status: Status):
 
         if status.approval_status:
             landlord = db["landlord"].find_one({"_id": landlord_id["_id"]})
-            print(landlord)
             if landlord is None:
                 return {"status": "400", "data": "No landlord found"}
 
@@ -422,7 +347,6 @@ async def delete_request(Requestdelete: Requestdelete):
 async def addressvalidation(landlordaddress: str = Body(...), updatedaddress : str = Body(...)):
     try:
         my_dist = gmaps.distance_matrix(landlordaddress,updatedaddress)['rows'][0]['elements'][0]
-        print(my_dist)
         if (my_dist["distance"]["value"] > 100):
             return False
         else:

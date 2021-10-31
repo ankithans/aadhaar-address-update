@@ -53,7 +53,6 @@ async def get_tenant(tenant_uid: str):
 async def create_tenant(tenant: Tenant):
     try:
         tenantDetails = {}
-        print(tenant)
         uid = encrypt(tenant.uid)
         if(db["tenant"].find_one({"uid": uid})):
             db["tenant"].update_one({"uid": uid}, {
@@ -73,7 +72,6 @@ async def create_tenant(tenant: Tenant):
             tenant.uid = encrypt(tenant.uid)
             db["tenant"].insert_one(dict(tenant))
             tenants = db["tenant"].find_one({"phone": int(tenant.phone)})
-            print(tenants)
             tenantDetails["id"] = str(ObjectId(tenants["_id"]))
             tenantDetails["address"] = tenants["address"]
             tenantDetails["fcm"] = tenants["fcm"]
@@ -102,9 +100,7 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
             pushAudit("Danger", description)
             return {"status": "400", "data": "No Address Update Permited"}
         res = await addressvalidation(UpdateAddress.landlordaddress, UpdateAddress.updatedaddress)
-        print(res)
         if res:
-            print("updated")
             db["requests"].update_one({"_id": request_id["_id"]}, {
                 "$set": {
                     "status": 3,
@@ -129,23 +125,7 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
                 tenant_id["_id"]))+" ) updated address Request (id: "+str(ObjectId(request_id["_id"]))+" )"
             pushAudit("succesful", description)
             return {"status": "200", "data": UpdateAddress.address}
-        # if UpdateAddress.address.house and request_id["landlord_address"]["country"] == UpdateAddress.address.country and request_id["landlord_address"]["dist"] == UpdateAddress.address.dist and request_id["landlord_address"]["loc"] == UpdateAddress.address.loc and request_id["landlord_address"]["pc"] == UpdateAddress.address.pc and request_id["landlord_address"]["state"] == UpdateAddress.address.state and request_id["landlord_address"]["vtc"] == UpdateAddress.address.vtc and request_id["landlord_address"]["street"] == UpdateAddress.address.street:
-        #     db["tenant"].update_one({"uid": uid}, {"$set": {
-        #         "address": dict(UpdateAddress.address),
-        #     }})
-        #     updateStatus = db["requests"].update_one({"_id": request_id["_id"]}, {
-        #         "$set": {
-        #             "status": 3,
-        #             "landlord_address": dict(UpdateAddress.address),
-        #             "updated": ""
-        #         }
-        #     })
-        #     description = "Tenant (id: "+str(ObjectId(
-        #         tenant_id["_id"]))+" ) updated address Request (id: "+str(ObjectId(request_id["_id"]))+" )"
-        #     pushAudit("succesful",description)
-        #     return {"status": "200", "data": UpdateAddress.address}
         else:
-            print("failed")
             description = "Tenant (id: "+str(ObjectId(
                 tenant_id["_id"]))+" ) update address Request (id: "+str(ObjectId(request_id["_id"]))+" ) denied due to to many changes in the address"
             pushAudit("Error", description)

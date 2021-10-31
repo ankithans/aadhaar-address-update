@@ -144,7 +144,8 @@ async def create_request(request: Request):
                         tenant_id["_id"]))+" ) made falls attempt to Create Request, Tenant and landlord are same. "
                     pushAudit("Danger", description)
                     return {"status": "400", "data": "tenant and landlord cannot be same."}
-                if land["fcm"] is not "" or land["fcm"] is not None:
+                print(land["fcm"])
+                if land["fcm"] != "" or land["fcm"] != None:
                     sendPush(
                         "Tenant is requesting for address update.",
                         "Do you agree and would like to give authoriy to update address?",

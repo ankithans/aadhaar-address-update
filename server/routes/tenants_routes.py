@@ -9,6 +9,7 @@ from ..config.database import db, encrypt
 from .requests_routes import addressvalidation
 
 from ..auditLog.auditlog import pushAudit
+from .requests_routes import sendPush
 
 from ..schemas.tenants_schema import tenants_serializer
 from bson.objectid import ObjectId
@@ -111,8 +112,19 @@ async def update_tenant_address(UpdateAddress: UpdateAddress):
                     "updated": ""
                 }
             })
-            db["tenant"].update_one({"_id": tenant_id["_id"]}, {"$set": {"address": dict(UpdateAddress.address)}
-                                                                })
+            tent = db["tenant"].find_one({"uid": uid})
+            db["tenant"].update_one({"_id": tenant_id["_id"]}, {"$set": {"address": dict(UpdateAddress.address)}})
+            sendPush(
+                    "Request Completed",
+                    "Your address has been updated Succesfully",
+                    [tent['fcm']],
+                )
+            land = db["landlord"].find_one({"phone": request_id["landlord_no"]})
+            sendPush(
+                    "Request Completed",
+                    "Your address has been sent Succesfully",
+                    [land['fcm']],
+                )
             description = "Tenant (id: "+str(ObjectId(
                 tenant_id["_id"]))+" ) updated address Request (id: "+str(ObjectId(request_id["_id"]))+" )"
             pushAudit("succesful", description)

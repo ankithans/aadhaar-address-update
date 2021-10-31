@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
 from ..models.landlords_model import Landlord
-from ..config.database import collection_name, encrypt, decrypt
+from ..config.database import collection_name, encrypt
+from ..auditLog.auditlog import pushAudit
 
 from ..schemas.landlords_schema import landlords_serializer
 from bson.objectid import ObjectId
@@ -12,14 +13,14 @@ landlord_api_router = APIRouter()
 
 
 # retrieve
-@landlord_api_router.get("/")
-async def get_landlords():
-    try:
-        landlords = landlords_serializer(collection_name.find())
-        return {"status": "ok", "data": landlords}
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=400, detail=str(e))
+# @landlord_api_router.get("/")
+# async def get_landlords():
+#     try:
+#         landlords = landlords_serializer(collection_name.find())
+#         return {"status": "ok", "data": landlords}
+#     except Exception as e:
+#         print(e)
+#         raise HTTPException(status_code=400, detail=str(e))
 
 # get landlord details
 
@@ -28,21 +29,24 @@ async def get_landlords():
 async def get_landlord(Landlord_uid):
     try:
         uid = encrypt(Landlord_uid)
-        print(uid)
         landlordDetails = {}
         landlord = collection_name.find_one({"uid": uid})
         landlordDetails["id"] = str(ObjectId(landlord["_id"]))
+        print(str(ObjectId(landlord["_id"])))
         landlordDetails["address"] = landlord["address"]
         landlordDetails["fcm"] = landlord["fcm"]
         landlordDetails["uid"] = landlord["uid"]
         landlordDetails["phone"] = landlord["phone"]
+        status = "succesful"
+        description = "Landlord (id: "+str(ObjectId(landlord["_id"]))+") called GET LANDLORD api"
+        pushAudit(status,description)
         return {"status": "ok", "data": landlordDetails}
     except Exception as e:
         print(e)
+        status = "Error"
+        description = str(e)
+        pushAudit(status,description)
         raise HTTPException(status_code=400, detail=str(e))
-
-# b'$2b$12$VWXW6zS2m3WY/GBx8Vo8h.2nlCmqu0Z9MRmnaCXzffw/94k5Z.ZKi'
-#
 
 
 @landlord_api_router.post("/login")
@@ -60,6 +64,8 @@ async def create_landlord(landlord: Landlord):
             landlordDetails["fcm"] = landlords["fcm"]
             landlordDetails["phone"] = landlords["phone"]
             landlordDetails["uid"] = landlord.uid
+            description = "Landlord (id: "+str(ObjectId(landlords["_id"]))+") logged in"
+            pushAudit("succesful", description)
             return {"status": "ok", "data": landlordDetails}
         else:
             landlord.address = dict(landlord.address)
@@ -72,9 +78,13 @@ async def create_landlord(landlord: Landlord):
             landlordDetails["fcm"] = landlords["fcm"]
             landlordDetails["phone"] = landlords["phone"]
             landlordDetails["uid"] = landlord.uid
+            description = "Landlord (id: "+str(ObjectId(landlords["_id"]))+") signed up"
+            pushAudit("succesful", description)
             return {"status": "ok", "data": landlordDetails}
     except Exception as e:
         print(e)
+        description = str(e)
+        pushAudit("Error", description)
         raise HTTPException(status_code=400, detail=str(e))
 
 

@@ -80,7 +80,7 @@ Landlord can Approve/Decline the request.
 FastAPI, Flutter, MongoDB, Twilio, Firebase Messaging, Google Fonts, Bloc Architecture, Google Maps API's, OpenCage API's, Base64 Encryption
 
 ## Steps to run loclly
-Clone the repo in your local machine and setup python and flutter environment
+Clone the repo in your local machine and setup python and flutter environment. Create .env file similar to .env.sample file with all the required fields.
 
 ### Mobile Application
 1. Go into `app/` directory by doing `cd app` in terminal.
